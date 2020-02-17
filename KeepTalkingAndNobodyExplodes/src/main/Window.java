@@ -14,14 +14,13 @@ import modules.Wires;
 public class Window extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-
-	static int transx;
-	static int transy;
 	JFrame frame;
-	Module[] modules = new Module[6];
-	Timer timer = new Timer(90);
+	Module[] modules;
+	Timer timer;
 
-	public Window() {
+	public Window(Module[] modules, Timer timer) {
+		this.modules = modules;
+		this.timer = timer;
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -39,7 +38,7 @@ public class Window extends JPanel {
 		MouseClickListener listener = new MouseClickListener();
 		listener.setModules(modules);
 		addMouseListener(listener);
-
+		timer.start();
 	}
 
 	public void generateModules() {
@@ -50,19 +49,22 @@ public class Window extends JPanel {
 					((Wires) modules[i]).generateRandom();
 			}
 		}
-		timer.start();
 	}
 
 	public void paint(Graphics g) {
 		super.paint(g);
 
 		timer.update(g);
-		
-		for (int i = 0; i < modules.length; i++) {
-			if (modules[i] != null) {
-				modules[i].drawFrame(g);
-				modules[i].update(g);
+		if (!timer.isDepleted()) {
+			for (int i = 0; i < modules.length; i++) {
+				if (modules[i] != null) {
+					modules[i].drawFrame(g);
+					modules[i].update(g);
+				}
 			}
+		} else {
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 
 		pause(10);
