@@ -19,6 +19,7 @@ public class Window extends JPanel {
 	static int transy;
 	JFrame frame;
 	Module[] modules = new Module[6];
+	Timer timer = new Timer(90);
 
 	public Window() {
 		frame = new JFrame();
@@ -49,10 +50,14 @@ public class Window extends JPanel {
 					((Wires) modules[i]).generateRandom();
 			}
 		}
+		timer.start();
 	}
 
 	public void paint(Graphics g) {
 		super.paint(g);
+
+		timer.update(g);
+		
 		for (int i = 0; i < modules.length; i++) {
 			if (modules[i] != null) {
 				modules[i].drawFrame(g);
