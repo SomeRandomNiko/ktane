@@ -3,23 +3,27 @@ package main;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import modules.Module;
 import modules.Wires;
 
 public class MouseClickListener implements MouseListener {
 
-	private Wires[] modules;
+	private Module[] modules;
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int[] xy = { e.getX(), e.getY() };
 		int moduleIndex = Coordinates.getModuleIndex(xy);
-		int wireIndex = Coordinates.getWireIndex(xy);
-		if (moduleIndex >= 0 && moduleIndex <= 5 && wireIndex >= 0 && wireIndex <= 5) {
-			modules[moduleIndex].getWires()[wireIndex].setCut(true);
+		if (moduleIndex >= 0) {
+
+			// Wires
+			if (Wires.class.isInstance(modules[moduleIndex])) {
+				int wireIndex = ((Wires) modules[moduleIndex]).getWireIndex(xy);
+				if (moduleIndex >= 0 && moduleIndex <= 5 && wireIndex >= 0 && wireIndex <= 5) {
+					((Wires) modules[moduleIndex]).getWires()[wireIndex].setCut(true);
+				}
+			}
 		}
-		System.out.println("WireIndex: " + wireIndex);
-		System.out.println("ModuleIndex: " + moduleIndex);
-		System.out.println("Coordinates: " + xy[0] + ", " + xy[1]);
 	}
 
 	@Override
@@ -49,7 +53,7 @@ public class MouseClickListener implements MouseListener {
 	/**
 	 * @return the modules
 	 */
-	public Wires[] getModules() {
+	public Module[] getModules() {
 		return modules;
 	}
 
@@ -57,7 +61,7 @@ public class MouseClickListener implements MouseListener {
 	 * @param modules
 	 *            the modules to set
 	 */
-	public void setModules(Wires[] modules) {
+	public void setModules(Module[] modules) {
 		this.modules = modules;
 	}
 

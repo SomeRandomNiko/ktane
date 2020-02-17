@@ -1,31 +1,22 @@
 package modules;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import modules.wires.Wire;
 
-public class Wires {
+public class Wires extends Module {
 	private Wire[] wires;
-	private BufferedImage frameImage;
-	private int moduleIndex;
-	private boolean solved;
 	private int wireCount;
 
 	public Wires(int moduleIndex) {
+		super(moduleIndex);
 		wires = new Wire[6];
-		solved = false;
-		this.moduleIndex = moduleIndex;
-		try {
-			frameImage = ImageIO.read(getClass().getResourceAsStream("/modules/moduleFrameUnsolved.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		wireCount = 0;
 	}
 
+	/**
+	 * Generates a random Wire module
+	 */
 	public void generateRandom() {
 		for (int i = 0; i < 3; i++) {
 			wires[i] = new Wire();
@@ -42,16 +33,36 @@ public class Wires {
 		}
 	}
 
+	/**
+	 * Updates the Graphics canvas for the wire module
+	 */
+
 	public void update(Graphics g) {
-		int modOffx = Coordinates.moduleX(moduleIndex);
-		int modOffy = Coordinates.moduleY(moduleIndex);
-		g.drawImage(frameImage, modOffx, modOffy, null);
 		for (int i = 0; i < wires.length; i++) {
 			try {
-				g.drawImage(wires[i].getImage(), modOffx + wires[i].getIndex() * wires[i].getImage().getWidth() + 40, modOffy, null);
+				g.drawImage(wires[i].getImage(), getModuleOffset()[0] + wires[i].getIndex() * wires[i].getImage().getWidth() + 40, getModuleOffset()[1], null);
 			} catch (NullPointerException e) {
 			}
 		}
+	}
+
+	/**
+	 * Returns the wire index based on its coordinates
+	 * 
+	 * @param xy
+	 *            The x and y coordinates
+	 * @return the wire index
+	 */
+	public int getWireIndex(int[] xy) {
+		int moduleIndex = getModuleIndex();
+		if (xy[1] > 500)
+			moduleIndex -= 3;
+		int ret = -1;
+		int x = getModuleOffset()[0];
+		if (xy[0] >= x + 40 && xy[0] <= 500 * moduleIndex - 40 + 500) {
+			ret = (int) ((xy[0] - 500 * moduleIndex - 40) / 70);
+		}
+		return ret;
 	}
 
 	/**
@@ -62,70 +73,9 @@ public class Wires {
 	}
 
 	/**
-	 * @return the frameImage
-	 */
-	public BufferedImage getFrameImage() {
-		return frameImage;
-	}
-
-	/**
-	 * @return the moduleIndex
-	 */
-	public int getModuleIndex() {
-		return moduleIndex;
-	}
-
-	/**
-	 * @return the solved
-	 */
-	public boolean isSolved() {
-		return solved;
-	}
-
-	/**
 	 * @return the wireCount
 	 */
 	public int getWireCount() {
 		return wireCount;
-	}
-
-	/**
-	 * @param wires
-	 *            the wires to set
-	 */
-	public void setWires(Wire[] wires) {
-		this.wires = wires;
-	}
-
-	/**
-	 * @param frameImage
-	 *            the frameImage to set
-	 */
-	public void setFrameImage(BufferedImage frameImage) {
-		this.frameImage = frameImage;
-	}
-
-	/**
-	 * @param moduleIndex
-	 *            the moduleIndex to set
-	 */
-	public void setModuleIndex(int moduleIndex) {
-		this.moduleIndex = moduleIndex;
-	}
-
-	/**
-	 * @param solved
-	 *            the solved to set
-	 */
-	public void setSolved(boolean solved) {
-		this.solved = solved;
-	}
-
-	/**
-	 * @param wireCount
-	 *            the wireCount to set
-	 */
-	public void setWireCount(int wireCount) {
-		this.wireCount = wireCount;
 	}
 }
