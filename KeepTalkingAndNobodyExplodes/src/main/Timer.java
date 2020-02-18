@@ -28,7 +28,7 @@ public class Timer {
 	String secString = "";
 	String dsecString = "";
 
-	Clip beep;
+	Clip timerBeep;
 
 	public Timer(int sec) {
 		depleted = false;
@@ -48,8 +48,8 @@ public class Timer {
 		}
 
 		try {
-			beep = AudioSystem.getClip();
-			beep.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/timerBeep.wav")));
+			timerBeep = AudioSystem.getClip();
+			timerBeep.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/timerBeep.wav")));
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 		}
 	}
@@ -92,10 +92,6 @@ public class Timer {
 
 	public void update(Graphics g) {
 		if (!depleted) {
-			if(!beep.isRunning()) {
-				beep.loop(Clip.LOOP_CONTINUOUSLY);
-				beep.start();
-			}
 			g.drawImage(timerFrame, 1500, 0, null);
 			g.setFont(timerFont);
 			g.setColor(new Color(0x1e1e1e));
