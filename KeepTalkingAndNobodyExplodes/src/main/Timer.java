@@ -69,7 +69,7 @@ public class Timer {
 	public String getTimerString() {
 		long timePassed = new GregorianCalendar().getTimeInMillis() - millis;
 		String ret = "";
-		if (running) {
+		if (running && timePassed <= time) {
 			min = (time - timePassed) / 60000;
 			sec = (time - timePassed) % 60000 / 1000;
 			dsec = (Math.round(((time - timePassed) % 1000) / 10));
@@ -94,6 +94,7 @@ public class Timer {
 		} else {
 			ret = "00:00";
 			depleted = true;
+			running = false;
 		}
 		return ret;
 	}

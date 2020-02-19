@@ -17,7 +17,7 @@ public class Window extends JPanel {
 
 	JFrame frame;
 	Module[] modules = new Module[6];
-	Timer timer = new Timer(60);
+	Timer timer = new Timer(10);
 
 	public Window() {
 		frame = new JFrame();
