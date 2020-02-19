@@ -14,12 +14,14 @@ public class Wire {
 	private boolean cut;
 	private int index;
 	private BufferedImage image;
+
 	Clip wireSnip;
 
 	public Wire() {
 		color = "";
 		cut = false;
 
+		// Open the wireSnip sound
 		try {
 			wireSnip = AudioSystem.getClip();
 			wireSnip.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/modules/wires/wireSnip.wav")));
@@ -28,15 +30,26 @@ public class Wire {
 
 	}
 
+	/**
+	 * Generates a random wire
+	 * 
+	 * @param blankAllowed
+	 *            if true, the generated wire can be empty
+	 */
 	public void generateRandom(boolean blankAllowed) {
 		String[] colors = { "red", "blue", "green", "yellow", "white" };
 		if (blankAllowed && new Random().nextBoolean()) {
+
 			// Blank / not Blank
 			generateBlank();
 			return;
 		}
+
+		// Random color
 		color = colors[new Random().nextInt(5)];
 		cut = false;
+
+		// Set the image
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/modules/wires/" + color + ".png"));
 		} catch (IOException e) {
@@ -44,9 +57,14 @@ public class Wire {
 		}
 	}
 
+	/**
+	 * Generates a blank wire
+	 */
 	public void generateBlank() {
 		color = "blank";
 		cut = false;
+
+		// Set the image
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/modules/wires/" + color + ".png"));
 		} catch (IOException e) {
@@ -105,7 +123,11 @@ public class Wire {
 	public void setCut(boolean cut) {
 		if (!this.cut) {
 			this.cut = cut;
+
+			// play the sound
 			wireSnip.start();
+
+			// Set the cut imaged
 			try {
 				if (!color.equals("blank"))
 					image = ImageIO.read(getClass().getResourceAsStream("/modules/wires/" + color + "Cut" + ".png"));

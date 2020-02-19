@@ -14,6 +14,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Timer {
+
 	private BufferedImage timerFrame;
 	private Font timerFont;
 	private boolean depleted;
@@ -24,11 +25,14 @@ public class Timer {
 	long min;
 	long dsec;
 
+	boolean running = false;
+
 	String minString = "";
 	String secString = "";
 	String dsecString = "";
 
 	Clip timerBeep;
+	Clip explosion;
 
 	public Timer(int sec) {
 		depleted = false;
@@ -47,17 +51,25 @@ public class Timer {
 			e.printStackTrace();
 		}
 
+		// Open the sond files
 		try {
 			timerBeep = AudioSystem.getClip();
 			timerBeep.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/timerBeep.wav")));
+			explosion = AudioSystem.getClip();
+			explosion.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/explosion.wav")));
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 		}
 	}
 
+	/**
+	 * Generates a timer String
+	 * 
+	 * @return a timer String
+	 */
 	public String getTimerString() {
 		long timePassed = new GregorianCalendar().getTimeInMillis() - millis;
 		String ret = "";
-		if (time - timePassed > 0) {
+		if (running) {
 			min = (time - timePassed) / 60000;
 			sec = (time - timePassed) % 60000 / 1000;
 			dsec = (Math.round(((time - timePassed) % 1000) / 10));
@@ -86,10 +98,26 @@ public class Timer {
 		return ret;
 	}
 
+	/**
+	 * Starts the timer
+	 */
 	public void start() {
 		millis = new GregorianCalendar().getTimeInMillis();
+		running = true;
 	}
 
+	/**
+	 * Stops the timer
+	 */
+	public void stop() {
+		running = false;
+	}
+
+	/**
+	 * Updates the timer on the screen
+	 * 
+	 * @param g
+	 */
 	public void update(Graphics g) {
 		if (!depleted) {
 			g.drawImage(timerFrame, 1500, 0, null);
@@ -98,6 +126,10 @@ public class Timer {
 			g.drawString("88:88", 1545, 135);
 			g.setColor(new Color(0xFF0000));
 			g.drawString(getTimerString(), 1545, 135);
+		} else {
+			// If the timer is depleted play the explosion sound
+			if (!explosion.isRunning())
+				explosion.start();
 		}
 	}
 
