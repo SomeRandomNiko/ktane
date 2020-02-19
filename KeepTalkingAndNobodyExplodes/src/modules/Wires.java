@@ -1,6 +1,7 @@
 package modules;
 
 import java.awt.Graphics;
+import java.util.Random;
 
 import main.Hitbox;
 import modules.wires.Wire;
@@ -21,8 +22,11 @@ public class Wires extends Module {
 	public void generateRandom() {
 		Hitbox[] hitboxes = new Hitbox[6];
 
+		Random random = new Random();
+
 		// Generates at least 3 Wires
-		for (int i = 0; i < 3; i++) {
+		wireCount = random.nextInt(4) + 3;
+		for (int i = 0; i < wireCount; i++) {
 			wires[i] = new Wire();
 			wires[i].generateRandom(false);
 			wires[i].setIndex(i);
@@ -30,21 +34,12 @@ public class Wires extends Module {
 			// Set the hitbox
 			hitboxes[i] = new Hitbox(getModuleOffset()[0] + i * wires[i].getImage().getWidth() + 40 + 20, getModuleOffset()[1] + 70, wires[i].getImage().getWidth() - 40,
 					wires[i].getImage().getHeight() - 140);
-			wireCount++;
 		}
 
 		// Generates optional wires
-		for (int i = 3; i < 6; i++) {
+		for (int i = wireCount; i < 6; i++) {
 			wires[i] = new Wire();
-			wires[i].generateRandom(true);
-			
-			if (!wires[i].getColor().equals("blank")) {
-				wireCount++;
-
-				// Set the hitbox
-				hitboxes[i] = new Hitbox(getModuleOffset()[0] + i * wires[i].getImage().getWidth() + 40 + 20, getModuleOffset()[1] + 70, wires[i].getImage().getWidth() - 40,
-						wires[i].getImage().getHeight() - 140);
-			}
+			wires[i].generateBlank();
 			wires[i].setIndex(i);
 		}
 		setHitboxes(hitboxes);
@@ -59,8 +54,51 @@ public class Wires extends Module {
 		for (int i = 0; i < wires.length; i++) {
 
 			// Checks if the wire has been cut
-			if (getHitboxes() != null && getHitboxes()[i] != null && getHitboxes()[i].isClick()) {
+			if (getHitboxes() != null && getHitboxes()[i] != null && getHitboxes()[i].isClick() && !wires[i].isCut()) {
 				wires[i].setCut(true);
+
+				System.out.println(wireCount + "wires");
+				int wireToCut;
+				switch (wireCount) {
+					// 3 Wires
+					case 3:
+						// Default case
+						wireToCut = wireCount - 1;
+
+						// If there are no red wires, cut the second wire.
+						if (getRedCount() == 0)
+							wireToCut = 1;
+
+						// Else, if the last wire is white, cut the last wire.
+						else if (wires[wireCount - 1].getColor().equals("white"))
+							wireToCut = wireCount - 1;
+
+						// Else, if there is more than one blue wire, cut the last blue wire
+						else if (getBlueCount() > 1) {
+							for (int j = wireCount - 1; j >= 0; j--) {
+								if (wires[j].getColor().equals("blue")) {
+									wireToCut = j;
+									break;
+								}
+							}
+						}
+						if (i == wireToCut)
+							setSolved(true);
+						else System.out.println("EXPLODE");
+
+						break;
+					// 4 Wires
+					case 4:
+						wireToCut = 1;
+						// If there is more than one red wire and the last digit of the serial number is
+						// odd, cut the last wire
+						
+						// TODO
+						
+						if (getRedCount() < 1)
+							wireToCut = 1;
+						break;
+				}
 			}
 
 			// Draws the wire image
@@ -69,6 +107,47 @@ public class Wires extends Module {
 			} catch (NullPointerException e) {
 			}
 		}
+
+	}
+
+	private int getRedCount() {
+		int ret = 0;
+		for (Wire x : wires)
+			if (x.getColor().equals("red"))
+				ret++;
+		return ret;
+	}
+
+	private int getBlueCount() {
+		int ret = 0;
+		for (Wire x : wires)
+			if (x.getColor().equals("blue"))
+				ret++;
+		return ret;
+	}
+
+	private int getYellowCount() {
+		int ret = 0;
+		for (Wire x : wires)
+			if (x.getColor().equals("yellow"))
+				ret++;
+		return ret;
+	}
+
+	private int getWhiteCount() {
+		int ret = 0;
+		for (Wire x : wires)
+			if (x.getColor().equals("white"))
+				ret++;
+		return ret;
+	}
+
+	private int getGreenCount() {
+		int ret = 0;
+		for (Wire x : wires)
+			if (x.getColor().equals("green"))
+				ret++;
+		return ret;
 	}
 
 	/**

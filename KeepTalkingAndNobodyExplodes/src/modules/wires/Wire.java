@@ -37,7 +37,7 @@ public class Wire {
 	 *            if true, the generated wire can be empty
 	 */
 	public void generateRandom(boolean blankAllowed) {
-		String[] colors = { "red", "blue", "green", "yellow", "white" };
+		String[] colors = { "red", "blue", "green", "yellow", "white", "black" };
 		if (blankAllowed && new Random().nextBoolean()) {
 
 			// Blank / not Blank
@@ -46,7 +46,7 @@ public class Wire {
 		}
 
 		// Random color
-		color = colors[new Random().nextInt(5)];
+		color = colors[new Random().nextInt(6)];
 		cut = false;
 
 		// Set the image

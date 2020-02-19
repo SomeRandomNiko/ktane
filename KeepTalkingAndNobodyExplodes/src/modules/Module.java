@@ -10,7 +10,8 @@ import main.Hitbox;
 
 public class Module {
 	private int moduleIndex;
-	private BufferedImage frameImage;
+	private BufferedImage frameImageSolved;
+	private BufferedImage frameImageUnsolved;
 	private boolean solved;
 	private Hitbox[] hitboxes;
 
@@ -24,13 +25,10 @@ public class Module {
 
 		if (isSolved()) {
 			// Set the "module solved" image
-			try {
-				setFrameImage(ImageIO.read(getClass().getResourceAsStream("/modules/moduleFrameUnsolved.png")));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			g.drawImage(frameImageSolved, getModuleOffset()[0], getModuleOffset()[1], null);
+		} else {
+			g.drawImage(frameImageUnsolved, getModuleOffset()[0], getModuleOffset()[1], null);
 		}
-		g.drawImage(frameImage, getModuleOffset()[0], getModuleOffset()[1], null);
 	}
 
 	/**
@@ -47,7 +45,9 @@ public class Module {
 		setSolved(false);
 
 		try {
-			setFrameImage(ImageIO.read(getClass().getResourceAsStream("/modules/moduleFrameUnsolved.png")));
+			frameImageUnsolved = ImageIO.read(getClass().getResourceAsStream("/modules/moduleFrameUnsolved.png"));
+			frameImageSolved = ImageIO.read(getClass().getResourceAsStream("/modules/moduleFrameSolved.png"));
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -105,21 +105,6 @@ public class Module {
 	 */
 	public void setModuleIndex(int moduleIndex) {
 		this.moduleIndex = moduleIndex;
-	}
-
-	/**
-	 * @return the frameImage
-	 */
-	public BufferedImage getFrameImage() {
-		return frameImage;
-	}
-
-	/**
-	 * @param frameImage
-	 *            the frameImage to set
-	 */
-	public void setFrameImage(BufferedImage frameImage) {
-		this.frameImage = frameImage;
 	}
 
 	/**
