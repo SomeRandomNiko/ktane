@@ -2,33 +2,22 @@ package bomb;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.IOException;
 import java.util.Random;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import modules.Module;
 import modules.wires.Wires;
 
 public class Bomb {
 
-	Timer timer = new Timer(60);
+	Timer timer = new Timer(300);
 	JFrame frame;
 	Module[] modules = new Module[6];
-
-	static Clip explosionSound;
-
+	private boolean solved = false;
 	private static SerialNumber serialNumber = new SerialNumber();
-	private static boolean explode = false;
+	private static boolean explode;
 
 	public Bomb() {
-		try {
-			explosionSound = AudioSystem.getClip();
-			explosionSound.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/explosion.wav")));
-		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-		}
+		explode = false;
 	}
 
 	/**
@@ -51,16 +40,26 @@ public class Bomb {
 	 * Draws everything
 	 */
 	public void update(Graphics g) {
-		if (!explode) {
+
+		if (!explode && timer.isRunning()) {
+			if (solved) {
+				timer.stop();
+			}
 			// Update the timer
 			timer.update(g);
 			serialNumber.update(g);
+			boolean temp = true;
 			for (int i = 0; i < modules.length; i++) {
 				if (modules[i] != null) {
-					modules[i].drawFrame(g);
 					modules[i].update(g);
+					modules[i].drawFrame(g);
+					if (!modules[i].isSolved()) {
+						temp = false;
+					}	
 				}
 			}
+			solved = temp;
+
 		} else {
 			// Black screen if the timer is depleted
 			g.setColor(Color.BLACK);
@@ -80,7 +79,7 @@ public class Bomb {
 	/**
 	 * @return the explode
 	 */
-	public static boolean isExploded() {
+	public boolean isExploded() {
 		return explode;
 	}
 
@@ -89,9 +88,6 @@ public class Bomb {
 	 *            the explode to set
 	 */
 	public static void setExplode(boolean explode) {
-		if (explode) {
-			explosionSound.start();
-		}
 		Bomb.explode = explode;
 	}
 
@@ -109,5 +105,12 @@ public class Bomb {
 	 */
 	public Timer getTimer() {
 		return timer;
+	}
+
+	/**
+	 * @return the solved
+	 */
+	public boolean isSolved() {
+		return solved;
 	}
 }
