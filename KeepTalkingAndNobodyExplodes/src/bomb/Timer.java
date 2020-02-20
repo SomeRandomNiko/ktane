@@ -1,4 +1,4 @@
-package main;
+package bomb;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -134,5 +134,35 @@ public class Timer {
 	 */
 	public boolean isDepleted() {
 		return depleted;
+	}
+
+	/**
+	 * @return the running
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+
+	/**
+	 * @return the timerBeep
+	 */
+	public Clip getTimerBeep() {
+		return timerBeep;
+	}
+
+	/**
+	 * @param running
+	 *            the running to set
+	 */
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	/**
+	 * @param timerBeep
+	 *            the timerBeep to set
+	 */
+	public void setTimerBeep(Clip timerBeep) {
+		this.timerBeep = timerBeep;
 	}
 }

@@ -3,7 +3,7 @@ package modules.wires;
 import java.awt.Graphics;
 import java.util.Random;
 
-import main.Bomb;
+import bomb.Bomb;
 import modules.Hitbox;
 import modules.Module;
 
