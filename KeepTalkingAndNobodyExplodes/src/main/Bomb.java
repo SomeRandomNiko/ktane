@@ -3,23 +3,33 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import modules.Module;
-import modules.Wires;
+import modules.wires.Wires;
 
-public class Window extends JPanel {
+public class Bomb extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	Timer timer = new Timer(60);
 	JFrame frame;
 	Module[] modules = new Module[6];
-	Timer timer = new Timer(60);
 
-	public Window() {
+	static Clip explosionSound;
+
+	private static SerialNumber serialNumber = new SerialNumber();
+	private static boolean explode = false;
+
+	public Bomb() {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -27,6 +37,11 @@ public class Window extends JPanel {
 		frame.setTitle("Keep Talking and Nobody Explodes");
 		frame.setLocation(0, 0);
 		frame.setVisible(true);
+		try {
+			explosionSound = AudioSystem.getClip();
+			explosionSound.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/explosion.wav")));
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+		}
 	}
 
 	/**
@@ -34,11 +49,9 @@ public class Window extends JPanel {
 	 * color
 	 */
 	public void makeScreen() {
-
 		Insets i = frame.getInsets();
 		frame.setSize(1900 + i.left + i.right, 1000 + i.top + i.bottom);
 		setBackground(new Color(0x545454));
-		timer.start();
 	}
 
 	/**
@@ -57,6 +70,7 @@ public class Window extends JPanel {
 							add(modules[i].getHitboxes()[j]);
 			}
 		}
+		timer.start();
 	}
 
 	/**
@@ -65,9 +79,10 @@ public class Window extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 
-		// Update the timer
-		timer.update(g);
-		if (!timer.isDepleted()) {
+		if (!explode) {
+			// Update the timer
+			timer.update(g);
+			serialNumber.update(g);
 			for (int i = 0; i < modules.length; i++) {
 				if (modules[i] != null) {
 					modules[i].drawFrame(g);
@@ -105,5 +120,32 @@ public class Window extends JPanel {
 	 */
 	public Module[] getModules() {
 		return modules;
+	}
+
+	/**
+	 * @return the explode
+	 */
+	public static boolean isExploded() {
+		return explode;
+	}
+
+	/**
+	 * @param explode
+	 *            the explode to set
+	 */
+	public static void setExplode(boolean explode) {
+		if (explode) {
+			explosionSound.start();
+		}
+		Bomb.explode = explode;
+	}
+
+	/**
+	 * Returns the serial number
+	 * 
+	 * @return the serial number
+	 */
+	public static SerialNumber getSerialNumber() {
+		return serialNumber;
 	}
 }

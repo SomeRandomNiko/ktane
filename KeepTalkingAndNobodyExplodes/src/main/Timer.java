@@ -32,7 +32,6 @@ public class Timer {
 	String dsecString = "";
 
 	Clip timerBeep;
-	Clip explosion;
 
 	public Timer(int sec) {
 		depleted = false;
@@ -55,8 +54,6 @@ public class Timer {
 		try {
 			timerBeep = AudioSystem.getClip();
 			timerBeep.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/timerBeep.wav")));
-			explosion = AudioSystem.getClip();
-			explosion.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/explosion.wav")));
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 		}
 	}
@@ -67,34 +64,36 @@ public class Timer {
 	 * @return a timer String
 	 */
 	public String getTimerString() {
-		long timePassed = new GregorianCalendar().getTimeInMillis() - millis;
 		String ret = "";
-		if (running && timePassed <= time) {
-			min = (time - timePassed) / 60000;
-			sec = (time - timePassed) % 60000 / 1000;
-			dsec = (Math.round(((time - timePassed) % 1000) / 10));
+		if (running) {
+			long timePassed = (new GregorianCalendar().getTimeInMillis() - millis);
+			if (!depleted && timePassed <= time) {
+				min = (time - timePassed) / 60000;
+				sec = (time - timePassed) % 60000 / 1000;
+				dsec = (Math.round(((time - timePassed) % 1000) / 10));
 
-			minString = "";
-			secString = "";
-			dsecString = "";
+				minString = "";
+				secString = "";
+				dsecString = "";
 
-			if (min < 10)
-				minString = "0";
-			minString += String.valueOf(min);
-			if (sec < 10)
-				secString = "0";
-			secString += String.valueOf(sec);
-			if (dsec < 10)
-				dsecString = "0";
-			dsecString += String.valueOf(dsec);
+				if (min < 10)
+					minString = "0";
+				minString += String.valueOf(min);
+				if (sec < 10)
+					secString = "0";
+				secString += String.valueOf(sec);
+				if (dsec < 10)
+					dsecString = "0";
+				dsecString += String.valueOf(dsec);
 
-			if (min > 0)
-				ret = minString + ":" + secString;
-			else ret = secString + ":" + dsecString;
-		} else {
-			ret = "00:00";
-			depleted = true;
-			running = false;
+				if (min > 0)
+					ret = minString + ":" + secString;
+				else ret = secString + ":" + dsecString;
+			} else {
+				ret = "00:00";
+				depleted = true;
+				Bomb.setExplode(true);
+			}
 		}
 		return ret;
 	}
@@ -127,10 +126,6 @@ public class Timer {
 			g.drawString("88:88", 1545, 135);
 			g.setColor(new Color(0xFF0000));
 			g.drawString(getTimerString(), 1545, 135);
-		} else {
-			// If the timer is depleted play the explosion sound
-			if (!explosion.isRunning())
-				explosion.start();
 		}
 	}
 

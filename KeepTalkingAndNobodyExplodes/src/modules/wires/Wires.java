@@ -1,10 +1,11 @@
-package modules;
+package modules.wires;
 
 import java.awt.Graphics;
 import java.util.Random;
 
-import main.Hitbox;
-import modules.wires.Wire;
+import main.Bomb;
+import modules.Hitbox;
+import modules.Module;
 
 public class Wires extends Module {
 	private Wire[] wires;
@@ -56,11 +57,10 @@ public class Wires extends Module {
 			// Checks if the wire has been cut
 			if (getHitboxes() != null && getHitboxes()[i] != null && getHitboxes()[i].isClick() && !wires[i].isCut()) {
 				wires[i].setCut(true);
-
-				System.out.println(wireCount + "wires");
-				int wireToCut;
+				int wireToCut = 0;
 				switch (wireCount) {
 					// 3 Wires
+					// -----------------------------------------------------------------------
 					case 3:
 						// Default case
 						wireToCut = wireCount - 1;
@@ -82,22 +82,70 @@ public class Wires extends Module {
 								}
 							}
 						}
-						if (i == wireToCut)
-							setSolved(true);
-						else System.out.println("EXPLODE");
-
 						break;
 					// 4 Wires
+					// -----------------------------------------------------------------------
 					case 4:
 						wireToCut = 1;
 						// If there is more than one red wire and the last digit of the serial number is
-						// odd, cut the last wire
-						
-						// TODO
-						
-						if (getRedCount() < 1)
+						// odd, cut the last red wire
+						if (getRedCount() > 1 && !Bomb.getSerialNumber().lastDigitIsEven()) {
+							for (int j = wireCount - 1; j >= 0; j--) {
+								if (wires[j].getColor().equals("red")) {
+									wireToCut = j;
+									break;
+								}
+							}
+							// Otherwise, if the last wire is yellow and there are no red wires, cut the
+							// first wire
+						} else if (wires[wireCount - 1].getColor().equals("yellow") && getRedCount() == 0)
+							wireToCut = 0;
+						// Otherwise, if there is exactly one blue wire, cut the first wire.
+						else if (getBlueCount() == 1)
+							wireToCut = 0;
+						// If there is more than one yellow wire, cut the last wire.
+						else if (getYellowCount() > 1)
+							wireToCut = wireCount - 1;
+						break;
+					// 5 Wires
+					// -----------------------------------------------------------------------
+					case 5:
+						wireToCut = 0;
+						// If the last wire is black, and the last digit of the serial number is odd,
+						// cut the fourth wire.
+						if (wires[wireCount - 1].getColor().equals("black") && !Bomb.getSerialNumber().lastDigitIsEven())
+							wireToCut = 3;
+						// Otherwise, if there is exactly one red wire and there is more than one yellow
+						// wire, cut the first wire.
+						else if (getRedCount() == 1 && getYellowCount() > 1)
+							wireToCut = 0;
+						// Otherwise, if there are no black wires, cut the second wire.
+						else if (getBlackCount() == 0)
 							wireToCut = 1;
 						break;
+
+					// 6 Wires
+					// -----------------------------------------------------------------------
+					case 6:
+						wireToCut = 3;
+						// If there are no yellow wires and the last digit of the serial number is odd,
+						// cut the third wire
+						if (getYellowCount() == 0 && !Bomb.getSerialNumber().lastDigitIsEven())
+							wireToCut = 2;
+						// Otherwise, if there is exactly one yellow wire and there is more than one
+						// white wire, cut the fourth wire.
+						else if (getYellowCount() == 1 && getWhiteCount() > 1)
+							wireToCut = 3;
+						// Otherwise if there are no red wires, cut the last wire.
+						else if (getRedCount() == 0)
+							wireToCut = wireCount - 1;
+						break;
+				}
+				if (i == wireToCut)
+					setSolved(true);
+				else {
+					System.out.println("EXPLODE");
+					Bomb.setExplode(true);
 				}
 			}
 
@@ -142,10 +190,10 @@ public class Wires extends Module {
 		return ret;
 	}
 
-	private int getGreenCount() {
+	private int getBlackCount() {
 		int ret = 0;
 		for (Wire x : wires)
-			if (x.getColor().equals("green"))
+			if (x.getColor().equals("black"))
 				ret++;
 		return ret;
 	}

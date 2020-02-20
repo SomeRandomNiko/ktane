@@ -5,8 +5,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import main.Hitbox;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Module {
 	private int moduleIndex;
@@ -14,6 +16,7 @@ public class Module {
 	private BufferedImage frameImageUnsolved;
 	private boolean solved;
 	private Hitbox[] hitboxes;
+	Clip moduleSolvedSound;
 
 	/**
 	 * Updates the modules
@@ -50,6 +53,12 @@ public class Module {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+
+		try {
+			moduleSolvedSound = AudioSystem.getClip();
+			moduleSolvedSound.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/modules/moduleSolved.wav")));
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 		}
 	}
 
@@ -119,6 +128,8 @@ public class Module {
 	 *            the solved to set
 	 */
 	public void setSolved(boolean solved) {
+		if (solved)
+			moduleSolvedSound.start();
 		this.solved = solved;
 	}
 
