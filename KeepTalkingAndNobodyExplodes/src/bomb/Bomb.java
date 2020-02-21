@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JFrame;
 import modules.Module;
+import modules.keypad.Keypad;
 import modules.wires.Wires;
 
 public class Bomb {
@@ -25,12 +26,16 @@ public class Bomb {
 	 */
 	public void generateModules() {
 		for (int i = 0; i < modules.length; i++) {
-			switch (new Random().nextInt(1)) {
+			switch (new Random().nextInt(2)) {
 
 				// Wires
 				case 0:
 					modules[i] = new Wires(i);
 					((Wires) modules[i]).generateRandom();
+					break;
+				case 1:
+					modules[i] = new Keypad(i);
+					break;
 
 			}
 		}
