@@ -8,6 +8,7 @@ import modules.Hitbox;
 import modules.Module;
 
 public class Wires extends Module {
+
 	private Wire[] wires;
 	private int wireCount;
 
@@ -157,6 +158,9 @@ public class Wires extends Module {
 		}
 
 	}
+
+	// GETTERS / SETTERS
+	// -----------------------------------------------------------------------
 
 	private int getRedCount() {
 		int ret = 0;

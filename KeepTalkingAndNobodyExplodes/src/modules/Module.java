@@ -11,11 +11,17 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Module {
+
 	private int moduleIndex;
+
+	// Frame images
 	private BufferedImage frameImageSolved;
 	private BufferedImage frameImageUnsolved;
+
 	private boolean solved;
 	private Hitbox[] hitboxes;
+
+	// Modules solved sound
 	Clip moduleSolvedSound;
 
 	/**
@@ -62,6 +68,9 @@ public class Module {
 		}
 	}
 
+	// GETTERS / SETTERS
+	// ------------------------------------------------------------------
+
 	/**
 	 * Get the module coordinate offset based on its index
 	 * 
@@ -106,14 +115,6 @@ public class Module {
 	 */
 	public int getModuleIndex() {
 		return moduleIndex;
-	}
-
-	/**
-	 * @param moduleIndex
-	 *            the moduleIndex to set
-	 */
-	public void setModuleIndex(int moduleIndex) {
-		this.moduleIndex = moduleIndex;
 	}
 
 	/**

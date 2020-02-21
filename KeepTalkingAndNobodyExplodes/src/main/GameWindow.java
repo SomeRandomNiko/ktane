@@ -3,12 +3,6 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
-import java.io.IOException;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import bomb.Bomb;
@@ -17,26 +11,20 @@ public class GameWindow extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	JFrame frame;
-	Bomb bomb;
-	Menu menu;
-	Clip defusedSound;
-	Clip explosionSound;
+	private Bomb bomb;
+	private Menu menu;
 
-	private static boolean ingame;
+	static boolean ingame;
 
+	// Window Constructor
 	public GameWindow() {
+		ingame = false;
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setTitle("Keep Talking and Nobody Explodes");
 		frame.setLocation(0, 0);
 		setLayout(null);
-
-		bomb = new Bomb();
-		menu = new Menu();
-
-		bomb.generateModules();
-
 	}
 
 	/**
@@ -50,66 +38,60 @@ public class GameWindow extends JPanel {
 		setBackground(new Color(0x545454));
 		frame.setVisible(true);
 		frame.add(this);
-		add(menu.getPlayButton());
-		add(menu.getQuitButton());
-
-		try {
-			defusedSound = AudioSystem.getClip();
-			defusedSound.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/defused.wav")));
-			explosionSound = AudioSystem.getClip();
-			explosionSound.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/explosion.wav")));
-		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		}
 	}
 
-	public void paint(Graphics g) {
-		super.paint(g);
-
-		if (bomb != null && bomb.isSolved()) {
-			defusedSound.start();
-			pause(3000);
-			defusedSound.stop();
-			ingame = false;
-			bomb = new Bomb();
-			menu = new Menu();
-			makeWindow();
-
-			bomb.generateModules();
-		} else if (bomb != null && bomb.isExploded()) {
-			explosionSound.start();
-			ingame = false;
-			bomb = new Bomb();
-			menu = new Menu();
-			makeWindow();
-			
-			bomb.generateModules();
-		}
-		
-		if (ingame) {
-			if (!bomb.getTimer().isRunning()) {
-
-				startGame(g);
-			}
-			remove(menu.getPlayButton());
-			remove(menu.getQuitButton());
-			bomb.update(g);
-		} else {
-			menu.update(g);
-		}
-		repaint();
-		pause(10);
+	/**
+	 * Removes all menu components from the window, generates a bomb and its
+	 * modules, adds the hitboxes and starts the timer
+	 */
+	public void startGame() {
+		removeAll();
+		System.out.println("startGame");
+		bomb = new Bomb();
+		bomb.generateModules();
+		ingame = true;
+		addHitboxes();
+		bomb.getTimer().start();
 	}
 
-	private void startGame(Graphics g) {
+	/**
+	 * Adds the hitboxes to the game window
+	 */
+	private void addHitboxes() {
 		for (int i = 0; i < bomb.getModules().length; i++) {
 			for (int j = 0; j < bomb.getModules()[i].getHitboxes().length; j++) {
 				if (bomb.getModules()[i].getHitboxes()[j] != null)
 					add(bomb.getModules()[i].getHitboxes()[j]);
 			}
-
 		}
-		bomb.getTimer().start();
+	}
+
+	/**
+	 * Removes all game components from the game window and creates the menu
+	 */
+	public void startMenu() {
+		removeAll();
+		menu = new Menu();
+		add(menu.getPlayButton());
+		add(menu.getQuitButton());
+		ingame = false;
+	}
+
+	/**
+	 * Draws the menu and the game
+	 */
+	public void paint(Graphics g) {
+		super.paint(g);
+
+		if (ingame) {
+			if (bomb != null)
+				bomb.update(g);
+		} else {
+			if (menu != null)
+				menu.update(g);
+		}
+		repaint();
+		pause(10);
 	}
 
 	/**
@@ -118,7 +100,7 @@ public class GameWindow extends JPanel {
 	 * @param ms
 	 *            milliseconds to sleep
 	 */
-	static void pause(long ms) {
+	void pause(long ms) {
 		try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
@@ -126,19 +108,20 @@ public class GameWindow extends JPanel {
 		}
 	}
 
+	// GETTERS / SETTERS
+	// ------------------------------------------------------------------------------------
+
 	/**
-	 * @return the ingame
+	 * @return the bomb
 	 */
-	public static boolean isIngame() {
-		return ingame;
+	public Bomb getBomb() {
+		return bomb;
 	}
 
 	/**
-	 * @param ingame
-	 *            the ingame to set
+	 * @return the menu
 	 */
-	public static void setIngame(boolean ingame) {
-		GameWindow.ingame = ingame;
+	public Menu getMenu() {
+		return menu;
 	}
-
 }

@@ -37,11 +37,11 @@ public class Bomb {
 	}
 
 	/**
-	 * Draws everything
+	 * Update the modules
 	 */
 	public void update(Graphics g) {
 
-		if (!explode && timer.isRunning()) {
+		if (!explode) {
 			if (solved) {
 				timer.stop();
 			}
@@ -55,7 +55,7 @@ public class Bomb {
 					modules[i].drawFrame(g);
 					if (!modules[i].isSolved()) {
 						temp = false;
-					}	
+					}
 				}
 			}
 			solved = temp;
@@ -66,6 +66,9 @@ public class Bomb {
 			g.fillRect(0, 0, 1900, 1000);
 		}
 	}
+
+	// GETTERS / SETTERS
+	// --------------------------------------------------------------------------
 
 	/**
 	 * Returns the modules

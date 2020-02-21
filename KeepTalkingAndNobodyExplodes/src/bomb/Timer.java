@@ -24,6 +24,7 @@ public class Timer {
 	long sec;
 	long min;
 	long dsec;
+	long timePassed;
 
 	boolean running = false;
 
@@ -65,36 +66,36 @@ public class Timer {
 	 */
 	public String getTimerString() {
 		String ret = "";
-		if (running) {
-			long timePassed = (new GregorianCalendar().getTimeInMillis() - millis);
-			if (!depleted && timePassed <= time) {
-				min = (time - timePassed) / 60000;
-				sec = (time - timePassed) % 60000 / 1000;
-				dsec = (Math.round(((time - timePassed) % 1000) / 10));
+		if (running)
+			timePassed = (new GregorianCalendar().getTimeInMillis() - millis);
+		if (!depleted && timePassed <= time) {
+			min = (time - timePassed) / 60000;
+			sec = (time - timePassed) % 60000 / 1000;
+			dsec = (Math.round(((time - timePassed) % 1000) / 10));
 
-				minString = "";
-				secString = "";
-				dsecString = "";
+			minString = "";
+			secString = "";
+			dsecString = "";
 
-				if (min < 10)
-					minString = "0";
-				minString += String.valueOf(min);
-				if (sec < 10)
-					secString = "0";
-				secString += String.valueOf(sec);
-				if (dsec < 10)
-					dsecString = "0";
-				dsecString += String.valueOf(dsec);
+			if (min < 10)
+				minString = "0";
+			minString += String.valueOf(min);
+			if (sec < 10)
+				secString = "0";
+			secString += String.valueOf(sec);
+			if (dsec < 10)
+				dsecString = "0";
+			dsecString += String.valueOf(dsec);
 
-				if (min > 0)
-					ret = minString + ":" + secString;
-				else ret = secString + ":" + dsecString;
-			} else {
-				ret = "00:00";
-				depleted = true;
-				Bomb.setExplode(true);
-			}
+			if (min > 0)
+				ret = minString + ":" + secString;
+			else ret = secString + ":" + dsecString;
+		} else {
+			ret = "00:00";
+			depleted = true;
+			Bomb.setExplode(true);
 		}
+
 		return ret;
 	}
 
@@ -156,13 +157,5 @@ public class Timer {
 	 */
 	public void setRunning(boolean running) {
 		this.running = running;
-	}
-
-	/**
-	 * @param timerBeep
-	 *            the timerBeep to set
-	 */
-	public void setTimerBeep(Clip timerBeep) {
-		this.timerBeep = timerBeep;
 	}
 }
