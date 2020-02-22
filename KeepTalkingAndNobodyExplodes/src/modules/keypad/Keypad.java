@@ -58,7 +58,7 @@ public class Keypad extends Module {
 	public void update(Graphics g) {
 		g.drawImage(keypad, getModuleOffset()[0], getModuleOffset()[1], null);
 		for (int i = 0; i < keys.length; i++) {
-			g.drawImage(keys[i].getSymbol(), getModuleOffset()[0] + (i < 2 ? i : i - 2) * (174 + 16) + 61, getModuleOffset()[1] + (i < 2 ? 0 : 1) * (174 + 16) + 83, 174, 174, null);
+			g.drawImage(keys[i].getSymbol(), getModuleOffset()[0] + 62 + (i < 2 ? i : i - 2) * (160 + 40), getModuleOffset()[1] + (i < 2 ? 0 : 1) * (160 + 40) + 90, null);
 		}
 	}
 }
