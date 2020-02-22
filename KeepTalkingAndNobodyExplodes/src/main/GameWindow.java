@@ -46,7 +46,6 @@ public class GameWindow extends JPanel {
 	 */
 	public void startGame() {
 		removeAll();
-		System.out.println("startGame");
 		bomb = new Bomb();
 		bomb.generateModules();
 		ingame = true;
