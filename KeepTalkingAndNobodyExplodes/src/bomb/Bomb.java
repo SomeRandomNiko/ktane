@@ -11,10 +11,10 @@ import modules.wires.Wires;
 
 public class Bomb {
 
-	Timer timer = new Timer(300);
 	JFrame frame;
 	Module[] modules = new Module[6];
 	private boolean solved;
+	private static Timer timer = new Timer(300);
 	private static SerialNumber serialNumber;
 	private static boolean explode;
 	private static Batteries batteries;
@@ -129,7 +129,7 @@ public class Bomb {
 	/**
 	 * @return the timer
 	 */
-	public Timer getTimer() {
+	public static Timer getTimer() {
 		return timer;
 	}
 

@@ -39,4 +39,14 @@ public class Indicator {
 		g.setFont(labelFont);
 		g.drawString(label, 1700, 565);
 	}
+
+	// GETTERS / SETTERS
+	// -----------------------------------------------------------------
+	
+	/**
+	 * @return the label
+	 */
+	public String getLabel() {
+		return label;
+	}
 }
