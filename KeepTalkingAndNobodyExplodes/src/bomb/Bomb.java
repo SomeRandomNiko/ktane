@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JFrame;
 import modules.Module;
+import modules.button.Button;
 import modules.keypad.Keypad;
 import modules.wires.Wires;
 
@@ -13,12 +14,19 @@ public class Bomb {
 	Timer timer = new Timer(300);
 	JFrame frame;
 	Module[] modules = new Module[6];
-	private boolean solved = false;
-	private static SerialNumber serialNumber = new SerialNumber();
+	private boolean solved;
+	private static SerialNumber serialNumber;
 	private static boolean explode;
+	private static Batteries batteries;
+	private static Indicator indicator;
 
 	public Bomb() {
 		explode = false;
+		solved = false;
+		serialNumber = new SerialNumber();
+		batteries = new Batteries();
+		indicator = new Indicator();
+		generateModules();
 	}
 
 	/**
@@ -26,7 +34,7 @@ public class Bomb {
 	 */
 	public void generateModules() {
 		for (int i = 0; i < modules.length; i++) {
-			switch (new Random().nextInt(2)) {
+			switch (new Random().nextInt(3)) {
 
 				// Wires
 				case 0:
@@ -35,6 +43,9 @@ public class Bomb {
 					break;
 				case 1:
 					modules[i] = new Keypad(i);
+					break;
+				case 2:
+					modules[i] = new Button(i);
 					break;
 
 			}
@@ -53,6 +64,9 @@ public class Bomb {
 			// Update the timer
 			timer.update(g);
 			serialNumber.update(g);
+			batteries.update(g);
+			indicator.update(g);
+
 			boolean temp = true;
 			for (int i = 0; i < modules.length; i++) {
 				if (modules[i] != null) {
@@ -108,6 +122,10 @@ public class Bomb {
 		return serialNumber;
 	}
 
+	public static Batteries getBatteries() {
+		return batteries;
+	}
+
 	/**
 	 * @return the timer
 	 */
@@ -120,5 +138,12 @@ public class Bomb {
 	 */
 	public boolean isSolved() {
 		return solved;
+	}
+
+	/**
+	 * @return the indicator
+	 */
+	public static Indicator getIndicator() {
+		return indicator;
 	}
 }

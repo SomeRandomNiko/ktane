@@ -47,7 +47,6 @@ public class GameWindow extends JPanel {
 	public void startGame() {
 		removeAll();
 		bomb = new Bomb();
-		bomb.generateModules();
 		ingame = true;
 		addHitboxes();
 		bomb.getTimer().start();
