@@ -17,8 +17,7 @@ public class KeepTalkingAndNobodyExplodes {
 		Clip explosionSound = null;
 
 		GameWindow window = new GameWindow();
-		window.makeWindow();
-
+		
 		// Game loop
 		while (true) {
 

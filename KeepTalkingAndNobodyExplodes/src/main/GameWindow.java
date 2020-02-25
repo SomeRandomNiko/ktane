@@ -13,7 +13,7 @@ public class GameWindow extends JPanel {
 	JFrame frame;
 	private Bomb bomb;
 	private Menu menu;
-
+	Insets in;
 	static boolean ingame;
 
 	// Window Constructor
@@ -23,21 +23,14 @@ public class GameWindow extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setTitle("Keep Talking and Nobody Explodes");
-		frame.setLocation(0, 0);
+		frame.pack();
+		in = frame.getInsets();
 		setLayout(null);
-	}
-
-	/**
-	 * Adjusts the screen size to account for the insets and sets the Background
-	 * color
-	 */
-	public void makeWindow() {
-		Insets in = frame.getInsets();
-		removeAll();
-		frame.setSize(1900 + in.left + in.right, 1000 + in.top + in.bottom);
 		setBackground(new Color(0x545454));
-		frame.setVisible(true);
+		frame.setSize(1900 + in.left + in.right, 1000 + in.top + in.bottom);
 		frame.add(this);
+		frame.setVisible(true);
+		
 	}
 
 	/**
@@ -49,7 +42,7 @@ public class GameWindow extends JPanel {
 		bomb = new Bomb();
 		ingame = true;
 		addHitboxes();
-		bomb.getTimer().start();
+		Bomb.getTimer().start();
 	}
 
 	/**

@@ -8,9 +8,11 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
-
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import bomb.Bomb;
 import modules.Hitbox;
 import modules.Module;
@@ -35,6 +37,9 @@ public class Button extends Module {
 	boolean hold;
 	int millisPassed;
 	boolean drawLight = false;
+	boolean canBePressed = true;
+	Clip press;
+	Clip release;
 
 	public Button(int moduleIndex) {
 		super(moduleIndex);
@@ -58,6 +63,16 @@ public class Button extends Module {
 			pressedImage = ImageIO.read(getClass().getResourceAsStream("/modules/button/" + color + "Pushed.png"));
 			unpressedImage = ImageIO.read(getClass().getResourceAsStream("/modules/button/" + color + ".png"));
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Open audio files
+		try {
+			press = AudioSystem.getClip();
+			release = AudioSystem.getClip();
+			press.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/modules/button/buttonPress.wav")));
+			release.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/modules/button/buttonRelease.wav")));
+		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
 			e.printStackTrace();
 		}
 
@@ -87,13 +102,26 @@ public class Button extends Module {
 
 		// If the button is held down draw the pressedImage
 		if (getHitboxes()[0].isClick()) {
+			if (canBePressed) {
+				press.stop();
+				press.setMicrosecondPosition(0);
+				press.start();
+				canBePressed = false;
+			}
 			g.drawImage(pressedImage, getModuleOffset()[0], getModuleOffset()[1], null);
 			buttonFont = buttonFont.deriveFont(40f);
 			g.setFont(buttonFont);
+
 		} else {
 			g.drawImage(unpressedImage, getModuleOffset()[0], getModuleOffset()[1], null);
 			buttonFont = buttonFont.deriveFont(45f);
 			g.setFont(buttonFont);
+			if (!canBePressed) {
+				release.stop();
+				release.setMicrosecondPosition(0);
+				release.start();
+				canBePressed = true;
+			}
 		}
 
 		// Draw the light

@@ -25,6 +25,7 @@ public class Timer {
 	long min;
 	long dsec;
 	long timePassed;
+	long secBevore;
 
 	boolean running = false;
 
@@ -57,6 +58,7 @@ public class Timer {
 			timerBeep.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/timerBeep.wav")));
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 		}
+		
 	}
 
 	/**
@@ -71,6 +73,14 @@ public class Timer {
 		if (!depleted && timePassed <= time) {
 			min = (time - timePassed) / 60000;
 			sec = (time - timePassed) % 60000 / 1000;
+			
+			// Play the beep every second
+			if (sec != secBevore) {
+				timerBeep.stop();
+				timerBeep.setMicrosecondPosition(0);
+				timerBeep.start();
+				secBevore = sec;
+			}
 			dsec = (Math.round(((time - timePassed) % 1000) / 10));
 
 			minString = "";
