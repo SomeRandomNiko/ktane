@@ -1,4 +1,4 @@
-package modules.button;
+package main.bomb.modules.button;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,9 +13,11 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import bomb.Bomb;
-import modules.Hitbox;
-import modules.Module;
+
+import main.GameWindow;
+import main.bomb.Bomb;
+import main.bomb.modules.Hitbox;
+import main.bomb.modules.Module;
 
 public class Button extends Module {
 	final String[] buttonColors = {
@@ -143,7 +145,7 @@ public class Button extends Module {
 		// Logic of the button
 		if (!isSolved()) {
 			if (getHitboxes()[0].isClick()) {
-				millisPassed += 10;
+				millisPassed += GameWindow.getFrameTime();
 				if (hold && millisPassed > 1000) {
 					drawLight = true;
 				} else if (!hold && millisPassed > 1000) {

@@ -5,7 +5,9 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import bomb.Bomb;
+
+import main.bomb.Bomb;
+import main.menu.Menu;
 
 public class GameWindow extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -15,6 +17,7 @@ public class GameWindow extends JPanel {
 	private Menu menu;
 	Insets in;
 	static boolean ingame;
+	private static int frametime = 10;
 
 	// Window Constructor
 	public GameWindow() {
@@ -82,7 +85,7 @@ public class GameWindow extends JPanel {
 				menu.update(g);
 		}
 		repaint();
-		pause(10);
+		pause(frametime);
 	}
 
 	/**
@@ -114,5 +117,12 @@ public class GameWindow extends JPanel {
 	 */
 	public Menu getMenu() {
 		return menu;
+	}
+	
+	/**
+	 * @return the frametime
+	 */
+	public static int getFrameTime() {
+		return frametime;
 	}
 }

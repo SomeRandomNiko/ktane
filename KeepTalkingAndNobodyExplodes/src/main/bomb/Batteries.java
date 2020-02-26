@@ -1,4 +1,4 @@
-package bomb;
+package main.bomb;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

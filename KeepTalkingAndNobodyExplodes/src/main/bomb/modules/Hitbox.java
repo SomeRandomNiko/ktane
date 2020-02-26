@@ -1,4 +1,4 @@
-package modules;
+package main.bomb.modules;
 
 import java.awt.Color;
 import java.awt.Dimension;

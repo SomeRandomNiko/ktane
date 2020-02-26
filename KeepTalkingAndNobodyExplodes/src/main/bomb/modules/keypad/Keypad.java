@@ -1,4 +1,4 @@
-package modules.keypad;
+package main.bomb.modules.keypad;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
-import bomb.Bomb;
-import modules.Hitbox;
-import modules.Module;
+import main.bomb.Bomb;
+import main.bomb.modules.Hitbox;
+import main.bomb.modules.Module;
 
 public class Keypad extends Module {
 

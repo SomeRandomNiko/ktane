@@ -1,4 +1,4 @@
-package modules.keypad;
+package main.bomb.modules.keypad;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package modules.wires;
+package main.bomb.modules.wires;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

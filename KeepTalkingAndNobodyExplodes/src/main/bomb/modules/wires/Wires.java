@@ -1,11 +1,11 @@
-package modules.wires;
+package main.bomb.modules.wires;
 
 import java.awt.Graphics;
 import java.util.Random;
 
-import bomb.Bomb;
-import modules.Hitbox;
-import modules.Module;
+import main.bomb.Bomb;
+import main.bomb.modules.Hitbox;
+import main.bomb.modules.Module;
 
 public class Wires extends Module {
 

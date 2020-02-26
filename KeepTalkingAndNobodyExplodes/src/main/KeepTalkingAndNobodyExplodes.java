@@ -17,22 +17,25 @@ public class KeepTalkingAndNobodyExplodes {
 		Clip explosionSound = null;
 
 		GameWindow window = new GameWindow();
-		
+
+		// Open the Audio clips
+		try {
+			menuMusic = AudioSystem.getClip();
+			menuMusic.open(AudioSystem.getAudioInputStream(KeepTalkingAndNobodyExplodes.class.getResourceAsStream("/menuLoop.wav")));
+			defusedSound = AudioSystem.getClip();
+			defusedSound.open(AudioSystem.getAudioInputStream(KeepTalkingAndNobodyExplodes.class.getResourceAsStream("/defused.wav")));
+			explosionSound = AudioSystem.getClip();
+			explosionSound.open(AudioSystem.getAudioInputStream(KeepTalkingAndNobodyExplodes.class.getResourceAsStream("/timer/explosion.wav")));
+
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+		}
+
 		// Game loop
 		while (true) {
 
-			// Open the Audio clips
-			try {
-				menuMusic = AudioSystem.getClip();
-				menuMusic.open(AudioSystem.getAudioInputStream(KeepTalkingAndNobodyExplodes.class.getResourceAsStream("/menuLoop.wav")));
-				defusedSound = AudioSystem.getClip();
-				defusedSound.open(AudioSystem.getAudioInputStream(KeepTalkingAndNobodyExplodes.class.getResourceAsStream("/defused.wav")));
-				explosionSound = AudioSystem.getClip();
-				explosionSound.open(AudioSystem.getAudioInputStream(KeepTalkingAndNobodyExplodes.class.getResourceAsStream("/timer/explosion.wav")));
-
-			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-			}
-
+			defusedSound.setMicrosecondPosition(0);
+			explosionSound.setMicrosecondPosition(0);
+			menuMusic.setMicrosecondPosition(0);
 			// Start menu music
 			menuMusic.loop(Clip.LOOP_CONTINUOUSLY);
 			menuMusic.start();
@@ -65,5 +68,4 @@ public class KeepTalkingAndNobodyExplodes {
 			defusedSound.stop();
 		}
 	}
-
 }

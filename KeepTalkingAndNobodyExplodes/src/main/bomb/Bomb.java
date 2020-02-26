@@ -1,13 +1,15 @@
-package bomb;
+package main.bomb;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JFrame;
-import modules.Module;
-import modules.button.Button;
-import modules.keypad.Keypad;
-import modules.wires.Wires;
+
+import main.bomb.modules.Module;
+import main.bomb.modules.button.Button;
+import main.bomb.modules.keypad.Keypad;
+import main.bomb.modules.memory.Memory;
+import main.bomb.modules.wires.Wires;
 
 public class Bomb {
 
@@ -19,6 +21,7 @@ public class Bomb {
 	private static boolean explode;
 	private static Batteries batteries;
 	private static Indicator indicator;
+
 
 	public Bomb() {
 		explode = false;
@@ -34,7 +37,7 @@ public class Bomb {
 	 */
 	public void generateModules() {
 		for (int i = 0; i < modules.length; i++) {
-			switch (new Random().nextInt(3)) {
+			switch (new Random().nextInt(4)) {
 
 				// Wires
 				case 0:
@@ -46,6 +49,9 @@ public class Bomb {
 					break;
 				case 2:
 					modules[i] = new Button(i);
+					break;
+				case 3:
+					modules[i] = new Memory(i); 
 					break;
 
 			}
@@ -146,4 +152,6 @@ public class Bomb {
 	public static Indicator getIndicator() {
 		return indicator;
 	}
+
+
 }
