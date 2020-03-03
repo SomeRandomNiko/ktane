@@ -22,7 +22,6 @@ public class Bomb {
 	private static Batteries batteries;
 	private static Indicator indicator;
 
-
 	public Bomb() {
 		explode = false;
 		solved = false;
@@ -42,7 +41,6 @@ public class Bomb {
 				// Wires
 				case 0:
 					modules[i] = new Wires(i);
-					((Wires) modules[i]).generateRandom();
 					break;
 				case 1:
 					modules[i] = new Keypad(i);
@@ -51,7 +49,7 @@ public class Bomb {
 					modules[i] = new Button(i);
 					break;
 				case 3:
-					modules[i] = new Memory(i); 
+					modules[i] = new Memory(i);
 					break;
 
 			}
@@ -152,6 +150,5 @@ public class Bomb {
 	public static Indicator getIndicator() {
 		return indicator;
 	}
-
 
 }

@@ -16,12 +16,7 @@ public class Wires extends Module {
 		super(moduleIndex);
 		wires = new Wire[6];
 		wireCount = 0;
-	}
 
-	/**
-	 * Generates a random Wire module
-	 */
-	public void generateRandom() {
 		Hitbox[] hitboxes = new Hitbox[6];
 
 		Random random = new Random();
