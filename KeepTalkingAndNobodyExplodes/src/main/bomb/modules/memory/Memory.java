@@ -140,15 +140,10 @@ public class Memory extends Module {
 			e.printStackTrace();
 		}
 
-		// ----------------------------------------
-		System.out.println("\nNEW MODULE");
 		for (int i = 0; i < stages.length; i++) {
 			stages[i] = new Stage(i);
-			System.out.println("STAGE: " + (i + 1) + ", DISPLAY: " + stages[i].getDisplayString() + ", POSITION: " + stages[i].getButtonToPress() + ", LABEL: "
-					+ stages[i].getButtonMap().get(stages[i].getButtonToPress()));
 		}
 
-		// -----------------------------------
 		Hitbox[] hitboxes = new Hitbox[4];
 		for (int i = 0; i < hitboxes.length; i++) {
 			hitboxes[i] = new Hitbox(getModuleOffset()[0] + 79 + i * (80 + 8), getModuleOffset()[1] + 334, 78, 86);
