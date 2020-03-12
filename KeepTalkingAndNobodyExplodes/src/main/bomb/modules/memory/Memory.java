@@ -139,9 +139,16 @@ public class Memory extends Module {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		// ----------------------------------------
+		System.out.println("\nNEW MODULE");
 		for (int i = 0; i < stages.length; i++) {
 			stages[i] = new Stage(i);
+			System.out.println("STAGE: " + (i + 1) + ", DISPLAY: " + stages[i].getDisplayString() + ", POSITION: " + stages[i].getButtonToPress() + ", LABEL: "
+					+ stages[i].getButtonMap().get(stages[i].getButtonToPress()));
 		}
+
+		// -----------------------------------
 		Hitbox[] hitboxes = new Hitbox[4];
 		for (int i = 0; i < hitboxes.length; i++) {
 			hitboxes[i] = new Hitbox(getModuleOffset()[0] + 79 + i * (80 + 8), getModuleOffset()[1] + 334, 78, 86);
@@ -159,30 +166,46 @@ public class Memory extends Module {
 
 	public void update(Graphics g) {
 		g.drawImage(memoryImage, getModuleOffset()[0], getModuleOffset()[1], null);
+
 		for (int i = 0; i < stage; i++) {
 			g.setColor(Color.GREEN);
 			g.fillRect(getModuleOffset()[0] + 361, getModuleOffset()[1] + 271 - i * 44, 42, 36);
 		}
-		g.setFont(displayFont);
-		g.setColor(Color.WHITE);
-		g.drawString(stages[stage].getDisplayString(), getModuleOffset()[0] + 150, getModuleOffset()[1] + 270);
-		g.setFont(buttonFont);
-
-		for (int i = 0; i < stages[stage].getButtonMap().size(); i++) {
-			g.setColor(new Color(0x8e7d6b));
-			g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
+		if (!isSolved()) {
+			g.setFont(displayFont);
 			g.setColor(Color.WHITE);
-			g.drawString(stages[stage].getButtonMap().get(i + 1).toString(), getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
+			g.drawString(stages[stage].getDisplayString(), getModuleOffset()[0] + 150, getModuleOffset()[1] + 270);
+			g.setFont(buttonFont);
+
+			for (int i = 0; i < stages[stage].getButtonMap().size(); i++) {
+				g.setColor(new Color(0x8e7d6b));
+				g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
+				g.setColor(Color.WHITE);
+				g.drawString(stages[stage].getButtonMap().get(i + 1).toString(), getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
+			}
+		} else {
+			for (int i = 0; i < 4; i++) {
+				g.setFont(buttonFont);
+				g.setColor(new Color(0x8e7d6b));
+				g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
+			}
+		}
+
+		if (stage > 4) {
+			setSolved(true);
 		}
 
 		if (!getHitboxes()[0].isClick() && !getHitboxes()[1].isClick() && !getHitboxes()[2].isClick() && !getHitboxes()[3].isClick())
 			stillClicked = false;
 
-		if (!stillClicked) {
+		if (!stillClicked && !isSolved()) {
 			for (int i = 0; i < getHitboxes().length; i++) {
 				if (getHitboxes()[i].isClick()) {
 					if (stages[stage].getButtonToPress() == i + 1) {
 						stage++;
+						if (stage == 5)
+							setSolved(true);
+
 						stillClicked = true;
 					} else {
 						Bomb.setExplode(true);

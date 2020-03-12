@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import main.bomb.modules.Module;
 import main.bomb.modules.button.Button;
 import main.bomb.modules.keypad.Keypad;
+import main.bomb.modules.maze.MazeModule;
 import main.bomb.modules.memory.Memory;
 import main.bomb.modules.wires.Wires;
 
@@ -16,7 +17,7 @@ public class Bomb {
 	JFrame frame;
 	Module[] modules = new Module[6];
 	private boolean solved;
-	private static Timer timer = new Timer(300);
+	private static Timer timer = new Timer(600);
 	private static SerialNumber serialNumber;
 	private static boolean explode;
 	private static Batteries batteries;
@@ -36,7 +37,7 @@ public class Bomb {
 	 */
 	public void generateModules() {
 		for (int i = 0; i < modules.length; i++) {
-			switch (new Random().nextInt(4)) {
+			switch (new Random().nextInt(5)) {
 
 				// Wires
 				case 0:
@@ -50,6 +51,9 @@ public class Bomb {
 					break;
 				case 3:
 					modules[i] = new Memory(i);
+					break;
+				case 4:
+					modules[i] = new MazeModule(i);
 					break;
 
 			}
