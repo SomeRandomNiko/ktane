@@ -20,33 +20,39 @@ public class Maze {
 		mazeIndex = new Random().nextInt(9);
 		setCirclePos();
 
+		// Random player position
 		player[0] = new Random().nextInt(6);
 		player[1] = new Random().nextInt(6);
 
+		// Random flag position
 		do {
 			flag[0] = new Random().nextInt(6);
 			flag[1] = new Random().nextInt(6);
 		} while (player[0] == flag[0] && player[1] == flag[1]);
 
+		// Read the maze from the file into the array
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/modules/maze/mazes/maze" + mazeIndex + ".txt")));
-			String zeile;
-			String[] temp;
-			System.out.println("MazeIndex:" + mazeIndex);
-			for (int i = 0; (zeile = reader.readLine()) != null; i++) {
-				temp = zeile.split(";");
-				for (int j = 0; j < temp.length; j++) {
-					maze[i][j] = Integer.valueOf(temp[j]);
-					System.out.print(maze[i][j] + " ");
+			char read;
+			for (int i = 0; i < maze.length; i++) {
+				for (int j = 0; (read = (char) reader.read()) != -1 && j < maze[i].length; j++) {
+					if (Character.isDigit(read)) {
+						maze[i][j] = read - 48;
+					} else {
+						j--;
+					}
 				}
-				System.out.println();
 			}
+			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Sets the cricle pos for each maze
+	 */
 	private void setCirclePos() {
 		switch (mazeIndex) {
 			case 0:
@@ -94,34 +100,42 @@ public class Maze {
 	// 2 - top wall
 	// 3 - left and top wall
 
-	public void moveLeft() {
-		System.out.println(maze[player[0]][player[1]]);
-		if (maze[player[0]][player[1]] != 1 && maze[player[0]][player[1]] != 3)
-			player[0]--;
-		else
-			Bomb.setExplode(true);
-	}
-
-	public void moveRight() {
-		System.out.println(maze[player[0] + 1][player[1]]);
-		if (maze[player[0] + 1][player[1]] != 1 && maze[player[0]][player[1]] != 3)
-			player[0]++;
-		else
-			Bomb.setExplode(true);
-	}
-
+	/**
+	 * Move the player up
+	 */
 	public void moveUp() {
-		System.out.println(maze[player[0]][player[1]]);
-		if (maze[player[0]][player[1]] != 2 && maze[player[0]][player[1]] != 3)
+		if (player[1] - 1 >= 0 && maze[player[1]][player[0]] != 2 && maze[player[1]][player[0]] != 3)
 			player[1]--;
 		else
 			Bomb.setExplode(true);
 	}
 
+	/**
+	 * Move the player down
+	 */
 	public void moveDown() {
-		System.out.println(maze[player[0]][player[1] + 1]);
-		if (maze[player[0]][player[1] + 1] != 2 && maze[player[0]][player[1]] != 3)
+		if (player[1] + 1 < 6 && maze[player[1] + 1][player[0]] != 2 && maze[player[1] + 1][player[0]] != 3)
 			player[1]++;
+		else
+			Bomb.setExplode(true);
+	}
+
+	/**
+	 * Move the player left
+	 */
+	public void moveLeft() {
+		if (player[0] - 1 >= 0 && maze[player[1]][player[0]] != 1 && maze[player[1]][player[0]] != 3)
+			player[0]--;
+		else
+			Bomb.setExplode(true);
+	}
+
+	/**
+	 * Move the player right
+	 */
+	public void moveRight() {
+		if (player[0] + 1 < 6 && maze[player[1]][player[0] + 1] != 1 && maze[player[1]][player[0] + 1] != 3)
+			player[0]++;
 		else
 			Bomb.setExplode(true);
 	}
@@ -133,13 +147,6 @@ public class Maze {
 	 */
 	public int[][] getMaze() {
 		return maze;
-	}
-
-	/**
-	 * @return the mazeIndex
-	 */
-	public int getMazeIndex() {
-		return mazeIndex;
 	}
 
 	/**

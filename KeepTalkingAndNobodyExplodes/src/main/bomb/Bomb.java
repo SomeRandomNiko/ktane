@@ -37,7 +37,8 @@ public class Bomb {
 	 */
 	public void generateModules() {
 		for (int i = 0; i < modules.length; i++) {
-			switch (new Random().nextInt(5)) {
+			int random = new Random().nextInt(5);
+			switch (random) {
 
 				// Wires
 				case 0:

@@ -1,6 +1,5 @@
 package main.bomb.modules;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -35,9 +34,9 @@ public class Hitbox extends JButton implements MouseListener {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		g.setColor(Color.GRAY);
-		if (hover)
-			g.fillRect(0, 0, width, height);
+//		g.setColor(Color.RED);
+//		if (hover)
+//			g.fillRect(0, 0, width, height);
 	}
 
 	@Override
