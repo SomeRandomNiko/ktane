@@ -25,16 +25,18 @@ public class Memory extends Module {
 
 	private class Stage {
 		private int display;
-		private HashMap<Integer, Integer> buttonMap = new HashMap<>();
+		private HashMap<Integer, Integer> positionByLabel = new HashMap<>();
+		private HashMap<Integer, Integer> labelByPosition = new HashMap<>();
 		private int stageIndex;
 
 		public Stage(int index) {
 			Random random = new Random();
 			int number;
-			for (int i = 0; buttonMap.size() < 4;) {
+			for (int i = 0; positionByLabel.size() < 4;) {
 				number = random.nextInt(4) + 1;
-				if (!buttonMap.containsKey(number)) {
-					buttonMap.put(number, i + 1);
+				if (!positionByLabel.containsKey(number)) {
+					positionByLabel.put(number, i + 1);
+					labelByPosition.put(i + 1, number);
 					i++;
 				}
 			}
@@ -42,7 +44,7 @@ public class Memory extends Module {
 			display = random.nextInt(4) + 1;
 		}
 
-		public int getButtonToPress() {
+		public int getButtonPosToPress() {
 			switch (stageIndex + 1) {
 				case 1:
 					switch (display) {
@@ -59,10 +61,10 @@ public class Memory extends Module {
 				case 2:
 					switch (display) {
 						case 1:
-							return buttonMap.get(4);
+							return getPositionByLabel(4);
 						case 2:
 						case 4:
-							return Memory.this.getStage(1).getButtonToPress();
+							return Memory.this.getStage(1).getButtonPosToPress();
 						case 3:
 							return 1;
 						default:
@@ -72,13 +74,13 @@ public class Memory extends Module {
 				case 3:
 					switch (display) {
 						case 1:
-							return Memory.this.getStage(2).getButtonMap().get(Memory.this.getStage(2).getButtonToPress());
+							return getPositionByLabel(Memory.this.getStage(2).getLabelByPosition(Memory.this.getStage(2).getButtonPosToPress()));
 						case 2:
-							return Memory.this.getStage(1).getButtonMap().get(Memory.this.getStage(1).getButtonToPress());
+							return getPositionByLabel(Memory.this.getStage(1).getLabelByPosition(Memory.this.getStage(1).getButtonPosToPress()));
 						case 3:
 							return 3;
 						case 4:
-							return buttonMap.get(4);
+							return getPositionByLabel(4);
 						default:
 							return -1;
 					}
@@ -86,12 +88,12 @@ public class Memory extends Module {
 				case 4:
 					switch (display) {
 						case 1:
-							return Memory.this.getStage(1).getButtonToPress();
+							return Memory.this.getStage(1).getButtonPosToPress();
 						case 2:
 							return 1;
 						case 3:
 						case 4:
-							return Memory.this.getStage(2).getButtonToPress();
+							return Memory.this.getStage(2).getButtonPosToPress();
 						default:
 							return -1;
 					}
@@ -99,13 +101,13 @@ public class Memory extends Module {
 				case 5:
 					switch (display) {
 						case 1:
-							return Memory.this.getStage(1).getButtonMap().get(Memory.this.getStage(1).getButtonToPress());
+							return getPositionByLabel(Memory.this.getStage(1).getLabelByPosition(Memory.this.getStage(1).getButtonPosToPress()));
 						case 2:
-							return Memory.this.getStage(2).getButtonMap().get(Memory.this.getStage(2).getButtonToPress());
+							return getPositionByLabel(Memory.this.getStage(2).getLabelByPosition(Memory.this.getStage(2).getButtonPosToPress()));
 						case 3:
-							return Memory.this.getStage(4).getButtonMap().get(Memory.this.getStage(4).getButtonToPress());
+							return getPositionByLabel(Memory.this.getStage(4).getLabelByPosition(Memory.this.getStage(4).getButtonPosToPress()));
 						case 4:
-							return Memory.this.getStage(3).getButtonMap().get(Memory.this.getStage(3).getButtonToPress());
+							return getPositionByLabel(Memory.this.getStage(3).getLabelByPosition(Memory.this.getStage(3).getButtonPosToPress()));
 						default:
 							return -1;
 					}
@@ -125,10 +127,24 @@ public class Memory extends Module {
 		}
 
 		/**
-		 * @return the buttonMap
+		 * @return the position by label
+		 */
+		public int getPositionByLabel(int label) {
+			return positionByLabel.get(label);
+		}
+
+		/**
+		 * @return the label by position
+		 */
+		public int getLabelByPosition(int position) {
+			return labelByPosition.get(position);
+		}
+
+		/**
+		 * @return the button HashMap
 		 */
 		public HashMap<Integer, Integer> getButtonMap() {
-			return buttonMap;
+			return positionByLabel;
 		}
 	}
 
@@ -142,6 +158,9 @@ public class Memory extends Module {
 
 		for (int i = 0; i < stages.length; i++) {
 			stages[i] = new Stage(i);
+			System.out.printf("Display: %s%nButtons: %d %d %d %d%nPositionToPress: %d, LabelToPress: %d%n", stages[i].getDisplayString(), stages[i].getLabelByPosition(1),
+					stages[i].getLabelByPosition(2), stages[i].getLabelByPosition(3), stages[i].getLabelByPosition(4), stages[i].getButtonPosToPress(),
+					stages[i].getLabelByPosition(stages[i].getButtonPosToPress()));
 		}
 
 		Hitbox[] hitboxes = new Hitbox[4];
@@ -172,12 +191,13 @@ public class Memory extends Module {
 			g.drawString(stages[stage].getDisplayString(), getModuleOffset()[0] + 150, getModuleOffset()[1] + 270);
 			g.setFont(buttonFont);
 
-			for (int i = 0; i < stages[stage].getButtonMap().size(); i++) {
-				g.setColor(new Color(0x8e7d6b));
-				g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
-				g.setColor(Color.WHITE);
-				g.drawString(stages[stage].getButtonMap().get(i + 1).toString(), getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
-			}
+			if (stages[stage].getButtonMap() != null)
+				for (int i = 0; i < stages[stage].getButtonMap().size(); i++) {
+					g.setColor(new Color(0x8e7d6b));
+					g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
+					g.setColor(Color.WHITE);
+					g.drawString(String.valueOf(stages[stage].getLabelByPosition(i + 1)), getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
+				}
 		} else {
 			for (int i = 0; i < 4; i++) {
 				g.setFont(buttonFont);
@@ -196,7 +216,7 @@ public class Memory extends Module {
 		if (!stillClicked && !isSolved()) {
 			for (int i = 0; i < getHitboxes().length; i++) {
 				if (getHitboxes()[i].isClick()) {
-					if (stages[stage].getButtonToPress() == i + 1) {
+					if (stages[stage].getButtonPosToPress() == i + 1) {
 						stage++;
 						if (stage == 5)
 							setSolved(true);
