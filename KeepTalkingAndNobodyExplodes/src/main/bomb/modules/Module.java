@@ -17,9 +17,12 @@ public class Module {
 	// Frame images
 	private BufferedImage frameImageSolved;
 	private BufferedImage frameImageUnsolved;
+	private BufferedImage emptyFrame;
 
 	private boolean solved;
 	private Hitbox[] hitboxes;
+
+	private boolean empty;
 
 	// Modules solved sound
 	Clip moduleSolvedSound;
@@ -32,9 +35,11 @@ public class Module {
 	 */
 	public void drawFrame(Graphics g) {
 
-		if (isSolved()) {
+		if (!empty && isSolved()) {
 			// Set the "module solved" image
 			g.drawImage(frameImageSolved, getModuleOffset()[0], getModuleOffset()[1], null);
+		} else if (empty) {
+			g.drawImage(emptyFrame, getModuleOffset()[0], getModuleOffset()[1], null);
 		} else {
 			g.drawImage(frameImageUnsolved, getModuleOffset()[0], getModuleOffset()[1], null);
 		}
@@ -65,6 +70,18 @@ public class Module {
 			moduleSolvedSound = AudioSystem.getClip();
 			moduleSolvedSound.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/modules/moduleSolved.wav")));
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+		}
+	}
+
+	public Module(int moduleIndex, boolean empty) {
+		this.empty = empty;
+		this.moduleIndex = moduleIndex;
+		solved = true;
+
+		try {
+			emptyFrame = ImageIO.read(getClass().getResourceAsStream("/modules/moduleEmpty.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -147,6 +164,13 @@ public class Module {
 	 */
 	public void setHitboxes(Hitbox[] hitboxes) {
 		this.hitboxes = hitboxes;
+	}
+
+	/**
+	 * @return the empty
+	 */
+	public boolean isEmpty() {
+		return empty;
 	}
 
 }

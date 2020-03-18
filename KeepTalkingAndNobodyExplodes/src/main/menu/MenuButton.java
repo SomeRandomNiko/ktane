@@ -2,32 +2,32 @@ package main.menu;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JButton;
 
 public class MenuButton extends JButton implements MouseListener {
 	private static final long serialVersionUID = 1L;
-
-	private String text;
 	private int xpos = 0;
 	private int ypos = 0;
 	private int width = 0;
 	private int height = 0;
 
 	private boolean hover;
-	private boolean click;
+	private boolean pressed;
+	private boolean canBeClicked = true;
+	private int mouseWheelRotation;
 
-	public MenuButton(String text, int x, int y, int width, int height) {
+	public MenuButton(int x, int y, int width, int height) {
 		this.xpos = x;
 		this.ypos = y;
 		this.width = width;
 		this.height = height;
-		this.text = text;
-		click = false;
+		pressed = false;
 		hover = false;
 		setBorderPainted(false);
 		setFocusable(true);
@@ -36,23 +36,39 @@ public class MenuButton extends JButton implements MouseListener {
 		setVisible(true);
 		setLocation(this.xpos, this.ypos);
 		addMouseListener(this);
+		addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				mouseWheelRotation = e.getWheelRotation();
+			}
+		});
+	}
+
+	/**
+	 * @return the mouseWheelRotation
+	 */
+	public int getMouseWheelRotation() {
+		return mouseWheelRotation;
+	}
+
+	/**
+	 * @param mouseWheelRotation
+	 *            the mouseWheelRotation to set
+	 */
+	public void resetMouseWheelRotation() {
+		mouseWheelRotation = 0;
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		g.setFont(new Font("Consolas", Font.PLAIN, 70));
-		g.setColor(Color.lightGray);
-		g.fillRect(0, 0, width, height);
-		g.setColor(Color.BLACK);
-		if (hover)
-			g.setColor(Color.WHITE);
-		g.drawString(text, 70, 70);
+		g.setColor(Color.RED);
+		g.fillRect(xpos, ypos, width, height);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -67,12 +83,13 @@ public class MenuButton extends JButton implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		click = true;
+		pressed = true;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		click = false;
+		pressed = false;
+		canBeClicked = true;
 	}
 
 	@Override
@@ -100,7 +117,18 @@ public class MenuButton extends JButton implements MouseListener {
 	/**
 	 * @return the click
 	 */
+	public boolean isPressed() {
+		return pressed;
+	}
+
+	/**
+	 * @return the click
+	 */
 	public boolean isClick() {
-		return click;
+		if (pressed && canBeClicked) {
+			canBeClicked = false;
+			return true;
+		}
+		return false;
 	}
 }

@@ -44,8 +44,10 @@ public class KeepTalkingAndNobodyExplodes {
 			window.startMenu();
 
 			// Wait for user to click the play button
-			while (!window.getMenu().getPlayButton().isClick())
-				window.pause(1);
+			while (!window.getMenu().getPlayButton().isPressed())
+				if(window.getMenu().getQuitButton().isClick())
+					System.exit(0);
+				else window.pause(1);
 
 			// Start the game
 			window.startGame();

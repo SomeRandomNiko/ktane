@@ -33,7 +33,7 @@ public class GameWindow extends JPanel {
 		frame.setSize(1900 + in.left + in.right, 1000 + in.top + in.bottom);
 		frame.add(this);
 		frame.setVisible(true);
-		
+
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class GameWindow extends JPanel {
 	 */
 	public void startGame() {
 		removeAll();
-		bomb = new Bomb();
+		bomb = new Bomb(menu.getModuleCount(), menu.getTimerSeconds());
 		ingame = true;
 		addHitboxes();
 		Bomb.getTimer().start();
@@ -53,9 +53,11 @@ public class GameWindow extends JPanel {
 	 */
 	private void addHitboxes() {
 		for (int i = 0; i < bomb.getModules().length; i++) {
-			for (int j = 0; j < bomb.getModules()[i].getHitboxes().length; j++) {
-				if (bomb.getModules()[i].getHitboxes()[j] != null)
-					add(bomb.getModules()[i].getHitboxes()[j]);
+			if (!bomb.getModules()[i].isEmpty()) {
+				for (int j = 0; j < bomb.getModules()[i].getHitboxes().length; j++) {
+					if (bomb.getModules()[i].getHitboxes()[j] != null)
+						add(bomb.getModules()[i].getHitboxes()[j]);
+				}
 			}
 		}
 	}
@@ -66,8 +68,13 @@ public class GameWindow extends JPanel {
 	public void startMenu() {
 		removeAll();
 		menu = new Menu();
+
 		add(menu.getPlayButton());
 		add(menu.getQuitButton());
+		add(menu.getModuleMinusButton());
+		add(menu.getModulePlusButton());
+		add(menu.getTimerButton());
+
 		ingame = false;
 	}
 
@@ -118,7 +125,7 @@ public class GameWindow extends JPanel {
 	public Menu getMenu() {
 		return menu;
 	}
-	
+
 	/**
 	 * @return the frametime
 	 */
