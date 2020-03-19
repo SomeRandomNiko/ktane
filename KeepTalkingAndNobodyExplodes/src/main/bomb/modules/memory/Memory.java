@@ -11,6 +11,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import main.Timing;
 import main.bomb.Bomb;
 import main.bomb.modules.Hitbox;
 import main.bomb.modules.Module;
@@ -21,7 +22,9 @@ public class Memory extends Module {
 	int stage = 0;
 	Font displayFont;
 	Font buttonFont;
-	boolean stillClicked = false;
+	Timing timing = new Timing(2000);
+
+	boolean drawBlank = false;
 
 	private class Stage {
 		private int display;
@@ -185,7 +188,7 @@ public class Memory extends Module {
 			g.setColor(Color.GREEN);
 			g.fillRect(getModuleOffset()[0] + 361, getModuleOffset()[1] + 271 - i * 44, 42, 36);
 		}
-		if (!isSolved()) {
+		if (!isSolved() && !timing.countDown()) {
 			g.setFont(displayFont);
 			g.setColor(Color.WHITE);
 			g.drawString(stages[stage].getDisplayString(), getModuleOffset()[0] + 150, getModuleOffset()[1] + 270);
@@ -199,34 +202,35 @@ public class Memory extends Module {
 					g.drawString(String.valueOf(stages[stage].getLabelByPosition(i + 1)), getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
 				}
 		} else {
-			for (int i = 0; i < 4; i++) {
-				g.setFont(buttonFont);
-				g.setColor(new Color(0x8e7d6b));
-				g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
-			}
+			drawBlank(g);
 		}
 
 		if (stage > 4) {
 			setSolved(true);
 		}
 
-		if (!getHitboxes()[0].isClick() && !getHitboxes()[1].isClick() && !getHitboxes()[2].isClick() && !getHitboxes()[3].isClick())
-			stillClicked = false;
-
-		if (!stillClicked && !isSolved()) {
+		if (!isSolved()) {
 			for (int i = 0; i < getHitboxes().length; i++) {
 				if (getHitboxes()[i].isClick()) {
 					if (stages[stage].getButtonPosToPress() == i + 1) {
+						timing.start();
 						stage++;
 						if (stage == 5)
 							setSolved(true);
 
-						stillClicked = true;
 					} else {
 						Bomb.setExplode(true);
 					}
 				}
 			}
+		}
+	}
+
+	private void drawBlank(Graphics g) {
+		for (int i = 0; i < 4; i++) {
+			g.setFont(buttonFont);
+			g.setColor(new Color(0x8e7d6b));
+			g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
 		}
 	}
 

@@ -16,6 +16,7 @@ public class KeepTalkingAndNobodyExplodes {
 		Clip defusedSound = null;
 		Clip explosionSound = null;
 
+		Timing timing = new Timing(4000);
 		GameWindow window = new GameWindow();
 
 		// Open the Audio clips
@@ -45,9 +46,10 @@ public class KeepTalkingAndNobodyExplodes {
 
 			// Wait for user to click the play button
 			while (!window.getMenu().getPlayButton().isPressed())
-				if(window.getMenu().getQuitButton().isClick())
+				if (window.getMenu().getQuitButton().isClick())
 					System.exit(0);
-				else window.pause(1);
+				else
+					window.pause(1);
 
 			// Start the game
 			window.startGame();
@@ -65,7 +67,10 @@ public class KeepTalkingAndNobodyExplodes {
 
 			// Stop the menu music and wait for repeat
 			menuMusic.stop();
-			window.pause(5000);
+			
+			timing.start();
+			while (timing.countDown())
+				;
 			explosionSound.stop();
 			defusedSound.stop();
 		}

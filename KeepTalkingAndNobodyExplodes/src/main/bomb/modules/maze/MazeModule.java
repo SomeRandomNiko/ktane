@@ -57,22 +57,22 @@ public class MazeModule extends Module {
 
 		// Move the player
 		if (!isSolved()) {
-			if (getHitboxes()[0].isClick()) {
+			if (getHitboxes()[0].isPressed()) {
 				if (canBePressed) {
 					canBePressed = false;
 					maze.moveUp();
 				}
-			} else if (getHitboxes()[1].isClick()) {
+			} else if (getHitboxes()[1].isPressed()) {
 				if (canBePressed) {
 					canBePressed = false;
 					maze.moveRight();
 				}
-			} else if (getHitboxes()[2].isClick()) {
+			} else if (getHitboxes()[2].isPressed()) {
 				if (canBePressed) {
 					canBePressed = false;
 					maze.moveDown();
 				}
-			} else if (getHitboxes()[3].isClick()) {
+			} else if (getHitboxes()[3].isPressed()) {
 				if (canBePressed) {
 					canBePressed = false;
 					maze.moveLeft();

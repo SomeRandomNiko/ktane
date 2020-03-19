@@ -103,7 +103,7 @@ public class Button extends Module {
 	public void update(Graphics g) {
 
 		// If the button is held down draw the pressedImage
-		if (getHitboxes()[0].isClick()) {
+		if (getHitboxes()[0].isPressed()) {
 			if (canBePressed) {
 				press.stop();
 				press.setMicrosecondPosition(0);
@@ -144,7 +144,7 @@ public class Button extends Module {
 
 		// Logic of the button
 		if (!isSolved()) {
-			if (getHitboxes()[0].isClick()) {
+			if (getHitboxes()[0].isPressed()) {
 				millisPassed += GameWindow.getFrameTime();
 				if (hold && millisPassed > 1000) {
 					drawLight = true;

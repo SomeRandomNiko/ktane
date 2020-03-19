@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JFrame;
-
-import main.GameWindow;
 import main.bomb.modules.Module;
 import main.bomb.modules.button.Button;
 import main.bomb.modules.keypad.Keypad;

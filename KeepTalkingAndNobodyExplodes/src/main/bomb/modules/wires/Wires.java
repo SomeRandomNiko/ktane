@@ -51,7 +51,7 @@ public class Wires extends Module {
 		for (int i = 0; i < wires.length; i++) {
 
 			// Checks if the wire has been cut
-			if (getHitboxes() != null && getHitboxes()[i] != null && getHitboxes()[i].isClick() && !wires[i].isCut()) {
+			if (getHitboxes() != null && getHitboxes()[i] != null && getHitboxes()[i].isPressed() && !wires[i].isCut()) {
 				wires[i].setCut(true);
 				int wireToCut = 0;
 				switch (wireCount) {

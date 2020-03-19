@@ -11,7 +11,8 @@ public class Hitbox extends JButton implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	private boolean hover;
-	private boolean click;
+	private boolean pressed;
+	private boolean canBeClicked = true;
 
 	private int width;
 	private int height;
@@ -55,12 +56,13 @@ public class Hitbox extends JButton implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		click = true;
+		pressed = true;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		click = false;
+		pressed = false;
+		canBeClicked = true;
 	}
 
 	@Override
@@ -88,8 +90,8 @@ public class Hitbox extends JButton implements MouseListener {
 	/**
 	 * @return the click
 	 */
-	public boolean isClick() {
-		return click;
+	public boolean isPressed() {
+		return pressed;
 	}
 
 	/**
@@ -120,6 +122,17 @@ public class Hitbox extends JButton implements MouseListener {
 	 */
 	public void setY(int y) {
 		this.ypos = y;
+	}
+	
+	/**
+	 * @return the click
+	 */
+	public boolean isClick() {
+		if (pressed && canBeClicked) {
+			canBeClicked = false;
+			return true;
+		}
+		return false;
 	}
 
 }

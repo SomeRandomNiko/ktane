@@ -101,7 +101,7 @@ public class Keypad extends Module {
 			}
 
 			// If a key is pressed, check the order, otherwise explode
-			if (getHitboxes()[i].isClick() && !keys[i].isPressed()) {
+			if (getHitboxes()[i].isPressed() && !keys[i].isPressed()) {
 
 				if (isInOrder(keys[i].getSymbolNumber(), order)) {
 					keys[i].setPressed(true);
