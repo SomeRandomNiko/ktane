@@ -1,6 +1,5 @@
 package main.menu;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -62,8 +61,6 @@ public class MenuButton extends JButton implements MouseListener {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect(xpos, ypos, width, height);
 	}
 
 	@Override

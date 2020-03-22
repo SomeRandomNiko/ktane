@@ -16,7 +16,6 @@ public class MazeModule extends Module {
 	private BufferedImage playerImage;
 	private BufferedImage flagImage;
 	private Hitbox[] hitboxes = new Hitbox[4];
-	boolean canBePressed = true;
 
 	public MazeModule(int moduleIndex) {
 		super(moduleIndex);
@@ -57,33 +56,18 @@ public class MazeModule extends Module {
 
 		// Move the player
 		if (!isSolved()) {
-			if (getHitboxes()[0].isPressed()) {
-				if (canBePressed) {
-					canBePressed = false;
-					maze.moveUp();
-				}
-			} else if (getHitboxes()[1].isPressed()) {
-				if (canBePressed) {
-					canBePressed = false;
-					maze.moveRight();
-				}
-			} else if (getHitboxes()[2].isPressed()) {
-				if (canBePressed) {
-					canBePressed = false;
-					maze.moveDown();
-				}
-			} else if (getHitboxes()[3].isPressed()) {
-				if (canBePressed) {
-					canBePressed = false;
-					maze.moveLeft();
-				}
-			} else {
-				canBePressed = true;
-			}
+			if (getHitboxes()[0].isClick())
+				maze.moveUp();
+			else if (getHitboxes()[1].isClick())
+				maze.moveRight();
+			else if (getHitboxes()[2].isClick())
+				maze.moveDown();
+			else if (getHitboxes()[3].isClick())
+				maze.moveLeft();
 
 			// If the player is at the flag set the module to be solved
 			if (maze.getFlag()[0] == maze.getPlayer()[0] && maze.getFlag()[1] == maze.getPlayer()[1])
-				setSolved(true);
+				setSolved();
 		}
 	}
 }

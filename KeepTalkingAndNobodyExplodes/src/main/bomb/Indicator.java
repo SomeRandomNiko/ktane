@@ -11,25 +11,28 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class Indicator {
-	private final String[] labels = {
-			"SND", "CLR", "CAR", "IND", "FRQ", "SIG", "NSA", "MSA", "TRN", "BOB", "FRK" };
+	// Possible labels
+	private final String[] labels = { "CLR", "CAR", "IND", "FRQ", "SIG", "NSA", "TRN", "FRK" };
 	private String label;
 	private Font labelFont;
 	private BufferedImage indicatorFrame;
 
 	public Indicator() {
+		// Creathe the Font
 		try {
 			labelFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/modules/button/buttonFont.ttf")).deriveFont(45f);
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
 
+		// Open the image
 		try {
 			indicatorFrame = ImageIO.read(getClass().getResourceAsStream("/indicator/indicatorFrame.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+		// Random label
 		label = labels[new Random().nextInt(labels.length)];
 	}
 
@@ -42,7 +45,7 @@ public class Indicator {
 
 	// GETTERS / SETTERS
 	// -----------------------------------------------------------------
-	
+
 	/**
 	 * @return the label
 	 */

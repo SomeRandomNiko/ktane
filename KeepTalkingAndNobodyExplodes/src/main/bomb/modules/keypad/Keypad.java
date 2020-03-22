@@ -107,13 +107,13 @@ public class Keypad extends Module {
 					keys[i].setPressed(true);
 					order++;
 				} else {
-					Bomb.setExplode(true);
+					Bomb.explode();
 				}
 			}
 
 			// If all the keys are pressed, set the module to be solved
 			if (order == 4)
-				setSolved(true);
+				setSolved();
 		}
 	}
 

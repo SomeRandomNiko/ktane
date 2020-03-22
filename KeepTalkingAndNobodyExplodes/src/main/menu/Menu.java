@@ -10,12 +10,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Menu {
+	
+	// Buttons
 	private MenuButton playButton;
 	private MenuButton quitButton;
 	private MenuButton plusButton;
 	private MenuButton minusButton;
 	private MenuButton timerButton;
 
+	// Images
 	private BufferedImage menuBackground;
 	private BufferedImage menuPlay;
 	private BufferedImage menuQuit;
@@ -25,8 +28,10 @@ public class Menu {
 
 	private Font timerFont;
 
+	// Default 5 minutes
 	private int timerSeconds = 300;
 
+	// Default 6 modules
 	private int moduleCount = 6;
 
 	public Menu() {
@@ -36,13 +41,13 @@ public class Menu {
 		minusButton = new MenuButton(91, 653, 171, 154);
 		timerButton = new MenuButton(104, 164, 676, 243);
 
+		// Read images
 		try {
 			menuBackground = ImageIO.read(getClass().getResourceAsStream("/menu/Menu.png"));
 			menuPlay = ImageIO.read(getClass().getResourceAsStream("/menu/MenuPlay.png"));
 			menuQuit = ImageIO.read(getClass().getResourceAsStream("/menu/MenuQuit.png"));
 			menuPlus = ImageIO.read(getClass().getResourceAsStream("/menu/MenuPlus.png"));
 			menuMinus = ImageIO.read(getClass().getResourceAsStream("/menu/MenuMinus.png"));
-
 			for (int i = 0; i < menuLights.length; i++) {
 				menuLights[i] = ImageIO.read(getClass().getResourceAsStream("/menu/lights/MenuLight" + (i + 1) + ".png"));
 			}
@@ -91,11 +96,9 @@ public class Menu {
 
 		int mouseWheelTemp = timerButton.getMouseWheelRotation();
 		if (mouseWheelTemp > 0) {
-			System.out.println("DOWN");
 			if (timerSeconds - 10 > 0)
 				timerSeconds -= 10;
 		} else if (mouseWheelTemp < 0) {
-			System.out.println("UP");
 			if (timerSeconds + 10 <= 20 * 60)
 				timerSeconds += 10;
 		}

@@ -107,7 +107,7 @@ public class Maze {
 		if (player[1] - 1 >= 0 && maze[player[1]][player[0]] != 2 && maze[player[1]][player[0]] != 3)
 			player[1]--;
 		else
-			Bomb.setExplode(true);
+			Bomb.explode();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class Maze {
 		if (player[1] + 1 < 6 && maze[player[1] + 1][player[0]] != 2 && maze[player[1] + 1][player[0]] != 3)
 			player[1]++;
 		else
-			Bomb.setExplode(true);
+			Bomb.explode();
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class Maze {
 		if (player[0] - 1 >= 0 && maze[player[1]][player[0]] != 1 && maze[player[1]][player[0]] != 3)
 			player[0]--;
 		else
-			Bomb.setExplode(true);
+			Bomb.explode();
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class Maze {
 		if (player[0] + 1 < 6 && maze[player[1]][player[0] + 1] != 1 && maze[player[1]][player[0] + 1] != 3)
 			player[0]++;
 		else
-			Bomb.setExplode(true);
+			Bomb.explode();
 	}
 
 	// GETTERS / SETTERS

@@ -6,7 +6,6 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.GregorianCalendar;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -20,12 +19,12 @@ public class Timer {
 	private boolean depleted;
 
 	long time;
-	long millis;
+	long nanos;
 	long sec;
 	long min;
 	long dsec;
 	long timePassed;
-	long secBevore;
+	long secBefore;
 
 	boolean running = false;
 
@@ -58,7 +57,7 @@ public class Timer {
 			timerBeep.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/timer/timerBeep.wav")));
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 		}
-		
+
 	}
 
 	/**
@@ -69,17 +68,17 @@ public class Timer {
 	public String getTimerString() {
 		String ret = "";
 		if (running)
-			timePassed = (new GregorianCalendar().getTimeInMillis() - millis);
+			timePassed = (long) ((System.nanoTime() - nanos) / 1E6);
 		if (!depleted && timePassed <= time) {
 			min = (time - timePassed) / 60000;
 			sec = (time - timePassed) % 60000 / 1000;
-			
+
 			// Play the beep every second
-			if (sec != secBevore) {
+			if (sec != secBefore) {
 				timerBeep.stop();
 				timerBeep.setMicrosecondPosition(0);
 				timerBeep.start();
-				secBevore = sec;
+				secBefore = sec;
 			}
 			dsec = (Math.round(((time - timePassed) % 1000) / 10));
 
@@ -99,11 +98,12 @@ public class Timer {
 
 			if (min > 0)
 				ret = minString + ":" + secString;
-			else ret = secString + ":" + dsecString;
+			else
+				ret = secString + ":" + dsecString;
 		} else {
 			ret = "00:00";
 			depleted = true;
-			Bomb.setExplode(true);
+			Bomb.explode();
 		}
 
 		return ret;
@@ -113,7 +113,7 @@ public class Timer {
 	 * Starts the timer
 	 */
 	public void start() {
-		millis = new GregorianCalendar().getTimeInMillis();
+		nanos = System.nanoTime();
 		running = true;
 	}
 

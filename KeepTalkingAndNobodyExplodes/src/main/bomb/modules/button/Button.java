@@ -20,12 +20,9 @@ import main.bomb.modules.Hitbox;
 import main.bomb.modules.Module;
 
 public class Button extends Module {
-	final String[] buttonColors = {
-			"blue", "red", "white", "yellow" };
-	final String[] buttonTexts = {
-			"PRESS", "HOLD", "DETONATE", "ABORT" };
-	final Color[] lightColors = {
-			Color.BLUE, Color.YELLOW, Color.RED, Color.WHITE };
+	final String[] buttonColors = { "blue", "red", "white", "yellow" };
+	final String[] buttonTexts = { "PRESS", "HOLD", "DETONATE", "ABORT" };
+	final Color[] lightColors = { Color.BLUE, Color.YELLOW, Color.RED, Color.WHITE };
 
 	private String color;
 	private String text;
@@ -78,8 +75,7 @@ public class Button extends Module {
 			e.printStackTrace();
 		}
 
-		setHitboxes(new Hitbox[] {
-				hitbox });
+		setHitboxes(new Hitbox[] { hitbox });
 
 		// Determine if the button has to be held or clicked
 		if (color.equals("blue") && text.equals("ABORT"))
@@ -94,7 +90,8 @@ public class Button extends Module {
 			hold = true;
 		else if (color.equals("red") && text.equals("HOLD"))
 			hold = false;
-		else hold = true;
+		else
+			hold = true;
 	}
 
 	/**
@@ -139,7 +136,8 @@ public class Button extends Module {
 		strHeight = metrics.getHeight();
 		if (color.equals("white"))
 			g.setColor(Color.BLACK);
-		else g.setColor(Color.WHITE);
+		else
+			g.setColor(Color.WHITE);
 		g.drawString(text, getModuleOffset()[0] + 118 + 132 - strWidth / 2, getModuleOffset()[1] + 72 + 132 + strHeight / 4);
 
 		// Logic of the button
@@ -149,31 +147,31 @@ public class Button extends Module {
 				if (hold && millisPassed > 1000) {
 					drawLight = true;
 				} else if (!hold && millisPassed > 1000) {
-					Bomb.setExplode(true);
+					Bomb.explode();
 				}
 			} else {
 				if (!hold && millisPassed > 0 && millisPassed < 1000) {
-					setSolved(true);
+					setSolved();
 					drawLight = false;
 
 				} else if (hold && millisPassed > 1000) {
 					if (lightColor.equals(Color.BLUE) && Bomb.getTimer().getTimerString().contains("4")) {
-						setSolved(true);
+						setSolved();
 						drawLight = false;
 					} else if (lightColor.equals(Color.WHITE) && Bomb.getTimer().getTimerString().contains("1")) {
-						setSolved(true);
+						setSolved();
 						drawLight = false;
 					} else if (lightColor.equals(Color.YELLOW) && Bomb.getTimer().getTimerString().contains("5")) {
-						setSolved(true);
+						setSolved();
 						drawLight = false;
 					} else if (Bomb.getTimer().getTimerString().contains("1")) {
-						setSolved(true);
+						setSolved();
 						drawLight = false;
 					} else {
-						Bomb.setExplode(true);
+						Bomb.explode();
 					}
 				} else if (hold && millisPassed > 0 && millisPassed < 1000) {
-					Bomb.setExplode(true);
+					Bomb.explode();
 				}
 				millisPassed = 0;
 			}

@@ -98,6 +98,7 @@ public class Bomb {
 			// Black screen if the timer is depleted
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 1900, 1000);
+			
 		}
 	}
 
@@ -121,11 +122,9 @@ public class Bomb {
 	}
 
 	/**
-	 * @param explode
-	 *            the explode to set
 	 */
-	public static void setExplode(boolean explode) {
-		Bomb.explode = explode;
+	public static void explode() {
+		explode = true;
 	}
 
 	/**

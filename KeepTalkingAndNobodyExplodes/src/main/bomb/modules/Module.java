@@ -19,7 +19,7 @@ public class Module {
 	private BufferedImage frameImageUnsolved;
 	private BufferedImage emptyFrame;
 
-	private boolean solved;
+	private boolean solved = false;;
 	private Hitbox[] hitboxes;
 
 	private boolean empty;
@@ -56,7 +56,6 @@ public class Module {
 
 	public Module(int moduleIndex) {
 		this.moduleIndex = moduleIndex;
-		setSolved(false);
 
 		try {
 			frameImageUnsolved = ImageIO.read(getClass().getResourceAsStream("/modules/moduleFrameUnsolved.png"));
@@ -145,10 +144,9 @@ public class Module {
 	 * @param solved
 	 *            the solved to set
 	 */
-	public void setSolved(boolean solved) {
-		if (solved)
-			moduleSolvedSound.start();
-		this.solved = solved;
+	public void setSolved() {
+		moduleSolvedSound.start();
+		solved = true;
 	}
 
 	/**

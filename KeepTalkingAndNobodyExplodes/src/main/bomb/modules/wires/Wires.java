@@ -138,10 +138,9 @@ public class Wires extends Module {
 						break;
 				}
 				if (i == wireToCut)
-					setSolved(true);
+					setSolved();
 				else {
-					System.out.println("EXPLODE");
-					Bomb.setExplode(true);
+					Bomb.explode();
 				}
 			}
 

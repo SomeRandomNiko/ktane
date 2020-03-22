@@ -16,8 +16,9 @@ public class KeepTalkingAndNobodyExplodes {
 		Clip defusedSound = null;
 		Clip explosionSound = null;
 
-		Timing timing = new Timing(4000);
 		GameWindow window = new GameWindow();
+		
+		Timing timing = new Timing(4000);
 
 		// Open the Audio clips
 		try {
@@ -29,28 +30,32 @@ public class KeepTalkingAndNobodyExplodes {
 			explosionSound.open(AudioSystem.getAudioInputStream(KeepTalkingAndNobodyExplodes.class.getResourceAsStream("/timer/explosion.wav")));
 
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+			e.printStackTrace();
 		}
 
 		// Game loop
 		while (true) {
-
+			
+			// Reset Audio Clips
 			defusedSound.setMicrosecondPosition(0);
 			explosionSound.setMicrosecondPosition(0);
 			menuMusic.setMicrosecondPosition(0);
-			// Start menu music
-			menuMusic.loop(Clip.LOOP_CONTINUOUSLY);
-			menuMusic.start();
-
+			
 			// Start the menu
 			window.startMenu();
+			
+			// Start menu music
+			menuMusic.loop(Clip.LOOP_CONTINUOUSLY);
+			menuMusic.start();		
 
 			// Wait for user to click the play button
-			while (!window.getMenu().getPlayButton().isPressed())
+			while (!window.getMenu().getPlayButton().isClick())
 				if (window.getMenu().getQuitButton().isClick())
 					System.exit(0);
 				else
-					window.pause(1);
+					window.pause(GameWindow.getFrameTime());
 
+			
 			// Start the game
 			window.startGame();
 
@@ -69,7 +74,7 @@ public class KeepTalkingAndNobodyExplodes {
 			menuMusic.stop();
 			
 			timing.start();
-			while (timing.countDown())
+			while (timing.counting())
 				;
 			explosionSound.stop();
 			defusedSound.stop();

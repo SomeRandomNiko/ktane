@@ -9,6 +9,7 @@ public class Timing {
 		this.ms = ms;
 	}
 
+	// Start the countdown
 	public void start() {
 		if (startingTime == 0) {
 			startingTime = System.nanoTime();
@@ -16,7 +17,8 @@ public class Timing {
 		}
 	}
 
-	public boolean countDown() {
+	// Return true if it is still counting
+	public boolean counting() {
 		if (counting) {
 			if (System.nanoTime() > startingTime + ms * 1E6) {
 				counting = false;

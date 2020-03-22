@@ -66,9 +66,8 @@ public class GameWindow extends JPanel {
 	 * Removes all game components from the game window and creates the menu
 	 */
 	public void startMenu() {
-		removeAll();
 		menu = new Menu();
-
+		removeAll();
 		add(menu.getPlayButton());
 		add(menu.getQuitButton());
 		add(menu.getModuleMinusButton());

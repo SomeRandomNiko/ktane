@@ -22,6 +22,8 @@ public class Memory extends Module {
 	int stage = 0;
 	Font displayFont;
 	Font buttonFont;
+
+	// Delay between stages
 	Timing timing = new Timing(2000);
 
 	boolean drawBlank = false;
@@ -32,6 +34,7 @@ public class Memory extends Module {
 		private HashMap<Integer, Integer> labelByPosition = new HashMap<>();
 		private int stageIndex;
 
+		// Generate random Stages
 		public Stage(int index) {
 			Random random = new Random();
 			int number;
@@ -47,6 +50,11 @@ public class Memory extends Module {
 			display = random.nextInt(4) + 1;
 		}
 
+		/**
+		 * Determines the position of the Button to press
+		 * 
+		 * @return the position of the button to press
+		 */
 		public int getButtonPosToPress() {
 			switch (stageIndex + 1) {
 				case 1:
@@ -159,11 +167,9 @@ public class Memory extends Module {
 			e.printStackTrace();
 		}
 
+		// Generate stages
 		for (int i = 0; i < stages.length; i++) {
 			stages[i] = new Stage(i);
-			System.out.printf("Display: %s%nButtons: %d %d %d %d%nPositionToPress: %d, LabelToPress: %d%n", stages[i].getDisplayString(), stages[i].getLabelByPosition(1),
-					stages[i].getLabelByPosition(2), stages[i].getLabelByPosition(3), stages[i].getLabelByPosition(4), stages[i].getButtonPosToPress(),
-					stages[i].getLabelByPosition(stages[i].getButtonPosToPress()));
 		}
 
 		Hitbox[] hitboxes = new Hitbox[4];
@@ -184,17 +190,21 @@ public class Memory extends Module {
 	public void update(Graphics g) {
 		g.drawImage(memoryImage, getModuleOffset()[0], getModuleOffset()[1], null);
 
+		// Draw the stage lights
 		for (int i = 0; i < stage; i++) {
 			g.setColor(Color.GREEN);
 			g.fillRect(getModuleOffset()[0] + 361, getModuleOffset()[1] + 271 - i * 44, 42, 36);
 		}
-		if (!isSolved() && !timing.countDown()) {
+
+		// Draw the display number
+		if (!isSolved() && !timing.counting()) {
 			g.setFont(displayFont);
 			g.setColor(Color.WHITE);
 			g.drawString(stages[stage].getDisplayString(), getModuleOffset()[0] + 150, getModuleOffset()[1] + 270);
 			g.setFont(buttonFont);
 
 			if (stages[stage].getButtonMap() != null)
+				// Draw the buttons
 				for (int i = 0; i < stages[stage].getButtonMap().size(); i++) {
 					g.setColor(new Color(0x8e7d6b));
 					g.drawString("8", getModuleOffset()[0] + 97 + i * (80 + 8), getModuleOffset()[1] + 405);
@@ -205,10 +215,8 @@ public class Memory extends Module {
 			drawBlank(g);
 		}
 
-		if (stage > 4) {
-			setSolved(true);
-		}
-
+		// If the correct button was pressed, go to the next stage. If the stage is 5,
+		// set the module to be solved
 		if (!isSolved()) {
 			for (int i = 0; i < getHitboxes().length; i++) {
 				if (getHitboxes()[i].isClick()) {
@@ -216,16 +224,17 @@ public class Memory extends Module {
 						timing.start();
 						stage++;
 						if (stage == 5)
-							setSolved(true);
+							setSolved();
 
 					} else {
-						Bomb.setExplode(true);
+						Bomb.explode();
 					}
 				}
 			}
 		}
 	}
 
+	// Draw a blank module
 	private void drawBlank(Graphics g) {
 		for (int i = 0; i < 4; i++) {
 			g.setFont(buttonFont);
