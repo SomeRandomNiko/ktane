@@ -35,9 +35,7 @@ public class Hitbox extends JButton implements MouseListener {
 
 	@Override
 	public void paintComponent(Graphics g) {
-//		g.setColor(Color.RED);
-//		if (hover)
-//			g.fillRect(0, 0, width, height);
+		
 	}
 
 	@Override

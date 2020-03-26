@@ -52,6 +52,7 @@ public class Module {
 	 *            the canvas
 	 */
 	public void update(Graphics g) {
+		
 	}
 
 	public Module(int moduleIndex) {
